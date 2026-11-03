@@ -1,0 +1,228 @@
+{
+  "documentationVersion": "1.0.0",
+  "auditTimestamp": "2026-10-28T21:57:44+02:00",
+  "project": {
+    "name": "veto-belt-prototype",
+    "root": "prototype_1/",
+    "framework": "Next.js 15.1.0 App Router",
+    "runtimeLibraries": { "react": "19.0.0", "react-dom": "19.0.0", "typescript": "5.7.2" },
+    "scope": "Frontend source, styles, local data and repository image assets. No application code was changed.",
+    "verificationMethod": "Source inspection and local image metadata extraction. Runtime/browser visual inspection was not performed.",
+    "entryFiles": ["app/layout.tsx", "app/page.tsx", "app/globals.css", "components/VetoPrototype.tsx", "lib/data.ts"]
+  },
+  "designSystem": {
+    "colorTokens": [
+      { "name": "red", "value": "#eb1d27", "rgb": "rgb(235, 29, 39)", "role": "Primary accent, active controls, recommendation, drop urgency", "source": "app/globals.css :root --red" },
+      { "name": "ink", "value": "#111111", "rgb": "rgb(17, 17, 17)", "role": "Main text, rules, dark backgrounds", "source": "app/globals.css :root --ink" },
+      { "name": "paper", "value": "#d9d8d3", "rgb": "rgb(217, 216, 211)", "role": "Default page background and text on ink", "source": "app/globals.css :root --paper" },
+      { "name": "ash", "value": "#a5a49f", "rgb": "rgb(165, 164, 159)", "role": "Declared muted gray token; no usage found in app stylesheet", "source": "app/globals.css :root --ash" },
+      { "name": "line", "value": "rgba(17, 17, 17, 0.35)", "role": "Muted borders", "source": "app/globals.css :root --line" },
+      { "name": "entryBackground", "value": "#101010", "role": "Entry/loading screen background", "source": ".entry" },
+      { "name": "entryText", "value": "#eeeeee", "role": "Entry/loading screen text", "source": ".entry" },
+      { "name": "entryWordmarkGhost", "value": "#181818", "role": "Oversized decorative VETO lettering", "source": ".entry:after" },
+      { "name": "headerBackdrop", "value": "rgba(217, 216, 211, 0.93)", "role": "Sticky translucent header", "source": "header" },
+      { "name": "grayDecorative", "value": "#c5c4bf", "role": "Masthead index decoration", "source": ".mast:after" },
+      { "name": "sceneGray", "values": ["#bbbbbb", "#e0dfda", "#555555", "#b6b5af", "#333333", "#e2e1dc", "#777777", "#2d2d2b"], "role": "CSS generated environment scenes", "source": ".scene and scene variant selectors" },
+      { "name": "modelSilhouette", "values": ["#1c1c1b", "#aaaaaa", "#454545"], "role": "CSS mannequin/outfit silhouette", "source": ".model rules" }
+    ],
+    "typography": {
+      "externalFontImport": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Oswald:wght@500;600;700&family=Rubik:wght@500;700;900&display=swap",
+      "families": [
+        { "family": "IBM Plex Mono", "weightsRequested": [400, 500, 600], "usage": "Body, utility copy and controls; body defaults to 12px uppercase" },
+        { "family": "Oswald", "weightsRequested": [500, 600, 700], "usage": "Wordmark, display headings, numeric results and countdown" },
+        { "family": "Rubik", "weightsRequested": [500, 700, 900], "usage": "Imported but no explicit CSS use found" },
+        { "family": "sans-serif", "usage": "Fallback for Oswald declarations" }
+      ],
+      "rules": [
+        { "selector": "body", "size": "12px", "weight": "normal (browser default 400)", "lineHeight": "normal", "letterSpacing": "normal", "transform": "uppercase", "family": "IBM Plex Mono, monospace" },
+        { "selector": ".entry:after", "size": "clamp(140px, 30vw, 500px)", "weight": 700, "lineHeight": 0.65, "letterSpacing": "-0.12em", "family": "Oswald" },
+        { "selector": ".wordmark", "size": "38px (mobile 32px)", "weight": 700, "lineHeight": 0.8, "letterSpacing": "-0.12em", "family": "Oswald" },
+        { "selector": "nav a", "size": "10px", "weight": "inherited", "lineHeight": "normal", "letterSpacing": "normal", "family": "body" },
+        { "selector": ".mast h1", "size": "clamp(64px, 15vw, 210px)", "weight": 700, "lineHeight": 0.76, "letterSpacing": "-0.065em", "family": "Oswald" },
+        { "selector": ".section-heading h2", "size": "clamp(50px, 10vw, 150px)", "weight": 700, "lineHeight": "0.76 (inherited from grouped mast selector)", "letterSpacing": "-0.065em", "family": "Oswald" },
+        { "selector": ".product-copy h2", "size": "clamp(70px, 13vw, 180px)", "weight": 700, "lineHeight": 0.7, "letterSpacing": "-0.07em", "family": "Oswald" },
+        { "selector": ".drop h2", "size": "clamp(30px, 5vw, 70px)", "weight": 700, "lineHeight": 0.9, "letterSpacing": "-0.03em", "family": "Oswald" },
+        { "selector": ".drop output", "size": "clamp(33px, 7vw, 105px)", "weight": 700, "lineHeight": 0.9, "letterSpacing": "-0.05em", "family": "Oswald" },
+        { "selector": ".remaining strong", "size": "clamp(80px, 13vw, 175px)", "weight": 700, "lineHeight": 0.75, "letterSpacing": "-0.08em", "family": "Oswald" },
+        { "selector": ".result strong", "size": "105px", "weight": 700, "lineHeight": 0.8, "letterSpacing": "-0.08em", "family": "Oswald" },
+        { "selector": "input[type=number], form input:not([type=checkbox])", "size": "28px", "weight": "inherited", "lineHeight": "normal", "letterSpacing": "normal", "family": "inherited IBM Plex Mono" },
+        { "selector": ".kicker", "size": "12px inherited", "weight": 600, "lineHeight": "normal", "letterSpacing": "0.14em", "family": "IBM Plex Mono" },
+        { "selector": ".enter", "size": "12px inherited; nested b 19px", "weight": "inherited", "lineHeight": "normal", "letterSpacing": "0.12em", "family": "IBM Plex Mono" }
+      ],
+      "verificationNote": "Font import is external and network-dependent; actual rendered font availability was not runtime-verified. CSS source explicitly uses IBM Plex Mono and Oswald only."
+    },
+    "spacingAndShape": {
+      "spacingConventions": "Fluid vw/clamp sizing combined with 4vw section gutters; mobile gutters switch to 18px.",
+      "verifiedValues": [
+        { "property": "page/header gutters", "value": "4vw; mobile header/sections 18px" },
+        { "property": "header height", "value": "69px" },
+        { "property": "masthead vertical padding", "value": "clamp(50px, 10vw, 140px) 4vw 35px" },
+        { "property": "section vertical padding", "value": "clamp(50px, 8vw, 110px)" },
+        { "property": "section heading bottom gap", "value": "35px" },
+        { "property": "builder control gap", "value": "15px" },
+        { "property": "primary product minimum height", "value": "550px desktop, 420px mobile" },
+        { "property": "scene height", "value": "min(73vw, 600px), 530px mobile" },
+        { "property": "border radius", "value": "0 for button and input; 50% for silhouette head and hole dots; otherwise no explicit radius" },
+        { "property": "input underline", "value": "2px solid #111" },
+        { "property": "scene outline", "value": "1px solid #111" },
+        { "property": "divider", "value": "1px solid #111; selected controls use red fill" }
+      ],
+      "shadowsAndOpacity": [
+        { "selector": "body:before", "value": "fixed full-screen SVG fractal noise overlay; opacity 0.1; z-index 30" },
+        { "selector": ".belt-load img", "value": "drop-shadow(0 6px 2px #000)" },
+        { "selector": ".belt-load i", "value": "final 0 0 0 5px #eb1d27 shadow" },
+        { "selector": ".scene:before", "value": "radial dot texture, opacity 0.22" },
+        { "selector": ".holebar i.chosen", "value": "0 0 0 4px #eb1d27 shadow" },
+        { "selector": "header", "value": "backdrop-filter: blur(7px); background alpha 0.93" }
+      ],
+      "gradientsAndEffects": [
+        "Global fixed inline SVG fractal turbulence noise texture, pointer-events none.",
+        "Builder base uses repeating-linear-gradient(125deg, #bbb 0 1px, #e0dfda 1px 15px) plus radial dot overlay.",
+        "CLUB scene uses linear-gradient(135deg, #555, #b6b5af 42%, #333); ROOFTOP uses a horizontal 50% split; NIGHT is solid #2d2d2b.",
+        "Belt product treatment: default contrast(1.25) grayscale(.2); black contrast(1.8) brightness(.45); white grayscale(1) brightness(1.9) contrast(.8) and mix-blend-mode:multiply.",
+        "CSS model belt uses contrast(1.3)."
+      ],
+      "designTokens": "Five :root variables: --red, --ink, --paper, --ash, --line. Most other values are direct CSS literals; no separate theme config or utility CSS framework detected."
+    },
+    "responsiveBreakpoints": [
+      { "query": "@media (max-width: 600px)", "changes": ["Header horizontal padding 18px; wordmark 32px", "Hide nav links from third child onward (size and drop links); preserve first two and language button", "Masthead min-height 42vh and 18px inline padding", "Product padding 18px, min-height 420px, belt image width 720px; copy spans columns and shifts with margin-left:45%", "Builder, size finder, member sections use 18px inline padding", "Scene fixed height 530px", "Builder controls, size grid, drop, member grid become one column", "Size second panel top border replaces inline-start border", "Drop gap 40px and remaining divider moves to top", "Member wall becomes one column", "Belt loader width 85vw; entry metadata inset 18px", "RTL scene label is moved from left to right"] },
+      { "query": "@media (prefers-reduced-motion: reduce)", "changes": ["All animations and transitions use 0.01ms duration", "Smooth scrolling disabled"] }
+    ]
+  },
+  "routes": [
+    { "path": "/", "name": "VETO prototype landing page", "implementation": "app/page.tsx -> VetoPrototype", "layout": "app/layout.tsx", "metadata": { "title": "VETO / REFUSE BASIC", "description": "VETO belt prototype", "documentLanguageInitial": "en" }, "routeStatus": "Only application route found in app/; no nested routes, not-found page, or route-specific loading/error UI found.", "sections": ["Entry/loading gate", "Sticky header/navigation", "Masthead", "Belt range (3 products)", "Outfit builder", "Size finder", "Drop timer", "Member wall/form", "Payment options"] }
+  ],
+  "components": [
+    { "name": "RootLayout", "purpose": "Wraps app route in English document and global stylesheet", "files": ["app/layout.tsx", "app/globals.css"], "structure": "html lang=en > body > children", "states": [], "responsive": "Delegated to page stylesheet", "references": ["metadata title/description in app/layout.tsx"] },
+    { "name": "VetoPrototype", "purpose": "Client-side site shell, entry gating, language state and section composition", "file": "components/VetoPrototype.tsx", "structure": "Entry until entered; then header + nav + mast + BeltSections + OutfitSwitcher + SizeFinder + Drop + Members + payments", "state": { "entered": "false initially; Enter button reveals site", "lang": "en initially; toggles en/ar and updates html lang and dir in useEffect" }, "navigation": "Anchor links to #belts, #build, #size, #drop; logo links #top. #members has no header navigation item. Smooth scroll is global CSS.", "accessibility": "Wordmark has aria-label; entry main has aria-label. No explicit focus styles, live regions or keyboard custom behavior found.", "references": ["copy object contains English/Arabic labels", "app/globals.css"] },
+    { "name": "Entry", "purpose": "Full viewport asset preload/loading gate", "file": "components/VetoPrototype.tsx: Entry", "layout": "100svh centered dark grid, top metadata, belt loading rail, loading text and delayed enter action", "visibleElements": ["VETO / 001", "load percentage", "moving red belt", "asset loading/locked status", "ENTER button when ready"], "behavior": "Preloads red, black, white full-belt WebP via Image objects; percentage is completed count / 3. On all load/error completions waits until at least 2500ms since start then shows locked and Enter. An image error still counts as complete. Enter reveals application without route change.", "states": ["loading: text LOADING ASSET NN/03 and no button", "ready: locked label and enter button", "image preload errors are not separately exposed"], "responsive": "Belt rail 74vw max 830px; 85vw <=600px; metadata inset 28px, mobile 18px.", "references": [".entry, .entry-meta, .belt-load, @keyframes snake, @keyframes lock", "prefers-reduced-motion media query"] },
+    { "name": "SiteHeader / Wordmark / Navigation", "purpose": "Sticky brand and section navigation with language switch", "file": "components/VetoPrototype.tsx", "layout": "69px sticky full-width flex header, 4vw gutters, brand left and horizontal nav right", "elements": ["VETO wordmark anchor to #top", "BELTS, BUILD, SIZE, DROP anchors", "language toggle button showing ع in English and EN in Arabic"], "states": ["language button alternates English/Arabic", "no current-section, hover, or active navigation styles defined", "language button has base border and padding but no bespoke hover"], "responsive": "At <=600px drops nav links third onward; BUILD stays visible; language button remains.", "references": ["header, .wordmark, nav, .lang", "VetoPrototype lang effect"] },
+    { "name": "Masthead", "purpose": "Brand headline and campaign rule", "file": "components/VetoPrototype.tsx", "layout": "Large minimum-height section with fluid top padding and decorative 01 at lower right", "elements": ["LOCAL / LEATHER / 2026 kicker", "REFUSE BASIC. / Arabic equivalent heading", "/// RULE 01 copy"], "states": [], "responsive": "Headline and padding fluid via clamp; inline gutter 18px mobile.", "references": [".mast, .mast:after, .kicker, .mast h1, .mast-rule"] },
+    { "name": "BeltSections / ProductCard", "purpose": "Three color belt presentations", "file": "components/VetoPrototype.tsx: BeltSections", "layout": "Three stacked article sections, each product min-height 550px; image spans both grid columns; copy bottom right with left divider", "instances": [
+      { "id": "red", "index": "01", "asset": "/belts/belt-red-full.webp", "heading": "RED", "rule": "RULE 01", "treatment": "contrast(1.25) grayscale(.2); heading red" },
+      { "id": "black", "index": "02", "asset": "/belts/belt-black-full.webp", "heading": "BLACK", "rule": "RULE 02", "treatment": "contrast(1.8) brightness(.45)" },
+      { "id": "white", "index": "03", "asset": "/belts/belt-white-full.webp", "heading": "WHITE", "rule": "RULE 03", "treatment": "grayscale(1) brightness(1.9) contrast(.8); mix-blend-mode:multiply" }
+    ], "elements": ["product index", "belt image with color-specific alt text", "color title", "rule copy", "EGP 1,900 / Arabic equivalent", "size finder anchor"], "behavior": "Size finder action links to #size. No cart or purchase action.", "responsive": "Image width clamp(530px, 86vw, 1300px), left margin -8vw and rotate(-8deg); mobile image width 720px; product copy moves to bottom, spans grid and margin-left 45%.", "references": [".product, .product>img, .product-copy, .product.red/.black/.white", "beltSrc()"] },
+    { "name": "OutfitSwitcher / Builder", "purpose": "Interactive CSS scene, outfit and belt preview", "file": "components/VetoPrototype.tsx: OutfitSwitcher", "layout": "Builder heading, scene preview, 3 fieldsets in desktop 3-column grid", "defaultState": { "scene": "STREET", "outfitIndex": 0, "belt": "red" }, "controls": { "scene": ["STREET", "CLUB", "ROOFTOP", "NIGHT"], "outfit": ["CUT 01", "CUT 02", "CUT 03"], "belt": ["red", "black", "white"] }, "visuals": "Scene background is CSS texture/gradient. Model head, body and garment are CSS silhouette; belt is image absolutely positioned using outfit data x/y/scale. Outfit top/name fields are data but top is not rendered.", "states": "Selected button receives .active red background and white text. No disabled/loading/error states.", "responsive": "Scene height min(73vw,600px), mobile 530px; model 255x500px centered, bottom -15px; controls stack at <=600px.", "sourceData": "data/outfits.json", "references": [".builder, .scene, .scene-* variants, .scene:before, .scene-label, .model, .head, .body, .garment, .build-controls, fieldset", "CSS clip-path polygon outfit variants"] },
+    { "name": "SizeFinder", "purpose": "Suggest belt size and hole based on waist measurement", "file": "components/VetoPrototype.tsx: SizeFinder", "layout": "Two-column bordered grid; left numeric input/unit selector; right size/hole result", "defaultState": { "unit": "cm", "value": 82 }, "logic": "Converts inches to centimeters with 2.54 multiplier. Finds inclusive min/max size range; if none matches, falls back to chart item at index 1. Chooses closest value in that item's holes array to converted waist and displays its 1-based index.", "controls": ["Number input min=1; controlled value", "CM / IN unit buttons"], "states": "Selected unit button .active; result updates immediately. Empty input becomes numeric 0. No explicit validation/error/empty state; out-of-range result falls back to chart's second entry.", "responsive": "Two equal columns desktop; one column at <=600px; divider becomes horizontal top border.", "sourceData": "data/size-chart.json", "references": [".size-grid, label, input rules, .unit, .result, .holebar, .chosen"] },
+    { "name": "Drop", "purpose": "Prototype countdown and simulated inventory display", "file": "components/VetoPrototype.tsx: Drop", "layout": "Dark two-column section, countdown left, remaining inventory right separated by border", "sourceData": "data/drops.json", "behavior": "now ticks every second; countdown is max(0, startsAt-now), displayed DD:HH:MM:SS. Remaining units decrement by one at random interval 7000-13000ms and clamp to zero. Intervals are cleaned up on unmount. Values are client-side simulated, not server data.", "states": ["countdown at zero remains 00:00:00:00", "units display 3-digit zero-padded", "no finished/stock empty state beyond 000"], "responsive": "One column <=600px; remaining block gets top border and top padding.", "references": [".drop, .remaining, .drop output", "React effect intervals"] },
+    { "name": "Members", "purpose": "Local member number wall and opt-out join form", "file": "components/VetoPrototype.tsx: Members", "layout": "Two-column grid, two-column wall at left and form at right", "sourceData": "data/members.json", "behavior": "Form prevents default. Blank trimmed name returns with no feedback. Creates initials from whitespace-separated name parts, next number = max current number + 1. If hide checked, existing wall remains and notice shows assigned ID plus privacy label; otherwise prepends member entry. Clears name after successful nonblank submit. State is ephemeral and resets on reload.", "states": ["initial fake members", "empty form has no explicit message", "successful visible join prepends item", "opt-out shows notice", "no success/error validation for malformed names"], "responsive": "Member grid one column and wall single column <=600px.", "references": [".member-grid, .wall, form, .check, .notice", "React useState join handler"] },
+    { "name": "PaymentOptions", "purpose": "Displays payment methods", "file": "components/VetoPrototype.tsx", "layout": "Section with kicker and wrapping horizontal numbered list", "elements": ["01 / CASH ON DELIVERY", "02 / CARD", "03 / MOBILE WALLET"], "behavior": "Display-only text; no links, payment form or checkout behavior.", "responsive": "Wraps with gap clamp(15px,5vw,75px).", "references": [".payments"] }
+  ],
+  "assets": {
+    "localPublic": [
+      { "path": "public/belts/belt-red-full.webp", "format": "webp", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "used": true, "usage": "Entry loading image and RED product; source function also selects full belt assets in builder", "rendering": "Native img; entry height 88px with auto width; product clamp width and CSS filters; builder width 260px, auto height", "external": false },
+      { "path": "public/belts/belt-black-full.webp", "format": "webp", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "used": true, "usage": "Preloaded for entry; BLACK product and outfit builder", "rendering": "Product contrast/brightness treatment; builder belt image width 260px", "external": false },
+      { "path": "public/belts/belt-white-full.webp", "format": "webp", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "used": true, "usage": "Preloaded for entry; WHITE product and outfit builder", "rendering": "Product grayscale/brightness/contrast and multiply treatment; builder belt image width 260px", "external": false },
+      { "path": "public/belts/belt-red-buckle.webp", "format": "webp", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "used": false, "usage": "No source reference found", "external": false },
+      { "path": "public/belts/belt-black-buckle.webp", "format": "webp", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "used": false, "usage": "No source reference found", "external": false },
+      { "path": "public/belts/belt-white-buckle.webp", "format": "webp", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "used": false, "usage": "No source reference found", "external": false },
+      { "path": "public/belts/preview-aligned.png", "format": "png", "dimensionsPx": [1493, 508], "channels": 3, "alpha": false, "used": false, "usage": "No source reference found; preview/reference asset", "external": false }
+    ],
+    "localReferenceAssets": [
+      { "path": "temp_assets/belt-red-full.png", "format": "png", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy" },
+      { "path": "temp_assets/belt-red-full.webp", "format": "webp", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy; byte-identical to public/belts/belt-red-full.webp" },
+      { "path": "temp_assets/belt-red-buckle.png", "format": "png", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy" },
+      { "path": "temp_assets/belt-red-buckle.webp", "format": "webp", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy; byte-identical to public/belts/belt-red-buckle.webp" },
+      { "path": "temp_assets/belt-black-full.png", "format": "png", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy" },
+      { "path": "temp_assets/belt-black-full.webp", "format": "webp", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy; byte-identical to public/belts/belt-black-full.webp" },
+      { "path": "temp_assets/belt-black-buckle.png", "format": "png", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy" },
+      { "path": "temp_assets/belt-black-buckle.webp", "format": "webp", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy; byte-identical to public/belts/belt-black-buckle.webp" },
+      { "path": "temp_assets/belt-white-full.png", "format": "png", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy" },
+      { "path": "temp_assets/belt-white-full.webp", "format": "webp", "dimensionsPx": [1493, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy; byte-identical to public/belts/belt-white-full.webp" },
+      { "path": "temp_assets/belt-white-buckle.png", "format": "png", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy" },
+      { "path": "temp_assets/belt-white-buckle.webp", "format": "webp", "dimensionsPx": [158, 156], "channels": 4, "alpha": true, "usedByFrontend": false, "usage": "Retained source/reference copy; byte-identical to public/belts/belt-white-buckle.webp" },
+      { "path": "temp_assets/preview-aligned.png", "format": "png", "dimensionsPx": [1493, 508], "channels": 3, "alpha": false, "usedByFrontend": false, "usage": "Retained preview/reference copy; byte-identical to public/belts/preview-aligned.png" }
+    ],
+    "externalAssets": [
+      { "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Oswald:wght@500;600;700&family=Rubik:wght@500;700;900&display=swap", "type": "CSS web-font stylesheet", "declaredIn": "app/globals.css @import", "status": "Source verified; resolved font files/network behavior not checked" }
+    ],
+    "generatedAssets": [
+      { "name": "Global noise texture", "kind": "inline SVG data URI with feTurbulence", "location": "app/globals.css body:before", "dimensions": "SVG viewBox 0 0 180 180 tiled as background image; CSS stretches over fixed viewport", "behavior": "opacity .1; no pointer events; z-index 30" },
+      { "name": "Wordmark", "kind": "Text/CSS", "location": ".wordmark and .entry:after", "note": "No logo image or icon library found; brand is typeset." },
+      { "name": "Scene/outfit placeholder", "kind": "CSS gradients, pseudo elements, shape and clip-path", "location": "app/globals.css .scene/.model rules", "note": "No model photography, background images, video, audio, icon font or icon library found." }
+    ],
+    "nonVisualFile": { "path": "temp_assets/.DS_Store", "kind": "macOS metadata file", "includedInVisualInventory": false }
+  },
+  "animations": [
+    { "name": "Belt loading slide", "target": ".belt-load img", "trigger": "Entry screen mount", "implementation": "CSS keyframes snake", "duration": "2.5s", "delay": "0s", "easing": "cubic-bezier(.68,-.1,.2,1)", "direction": "normal", "iterations": 1, "fill": "forwards", "effect": "translateX(-70%) to translateX(-8%)", "reducedMotion": "duration overridden to .01ms" },
+    { "name": "Loading lock indicator", "target": ".belt-load i", "trigger": "Entry screen mount", "implementation": "CSS keyframes lock", "duration": "2.5s", "easing": "default ease", "iterations": 1, "fill": "forwards", "effect": "opacity 0 through 80%, then visible with red 5px ring shadow", "reducedMotion": "duration overridden to .01ms" },
+    { "name": "Enter hover feedback", "target": ".enter:hover", "trigger": "Pointer hover", "implementation": "CSS transition", "duration": ".2s", "easing": "default ease", "effect": "red background and border, white text", "reducedMotion": "duration overridden to .01ms" },
+    { "name": "Smooth anchor scrolling", "target": "document", "trigger": "Anchor navigation", "implementation": "CSS html scroll-behavior:smooth", "duration": null, "easing": null, "effect": "browser smooth scroll", "reducedMotion": "scroll-behavior:auto" },
+    { "name": "Countdown and inventory", "target": "Drop output values", "trigger": "Component mount and interval ticks", "implementation": "JavaScript setInterval", "duration": "1s countdown refresh; random inventory decrement interval 7-13s", "effect": "Text updates; no interpolated visual transition specified", "reducedMotion": "No special behavior required" }
+  ],
+  "interactions": [
+    { "name": "Entry gate", "trigger": "Asset load/error completion and elapsed minimum 2.5s", "result": "Displays ENTER; clicking sets entered true" },
+    { "name": "Section navigation", "trigger": "Click header anchors or product finder link", "result": "Navigates within page using hashes; smooth scroll when motion preference allows" },
+    { "name": "Language toggle", "trigger": "Click language button", "result": "Swaps English/Arabic copy, html lang, and document direction" },
+    { "name": "Builder selections", "trigger": "Click scene, outfit, or belt button", "result": "Updates React state, selected button style, scene class, outfit silhouette/position, or belt source" },
+    { "name": "Size calculator", "trigger": "Change number or unit", "result": "Recomputes size and nearest hole immediately" },
+    { "name": "Member submission", "trigger": "Submit form", "result": "Creates local-only numbered initials entry or privacy notice; no persistence" },
+    { "name": "Payment display", "trigger": "None", "result": "Static presentation only" }
+  ],
+  "layoutAndStacking": {
+    "overall": "Single long scrolling landing page; global border-box sizing; section gutters 4vw desktop and 18px mobile.",
+    "positioning": [
+      { "selector": ".entry", "position": "relative; height 100svh; overflow hidden; grid centered" },
+      { "selector": "body:before", "position": "fixed; inset 0; z-index 30" },
+      { "selector": "header", "position": "sticky; top 0; z-index 10; backdrop-filter blur(7px)" },
+      { "selector": ".entry:after", "position": "absolute; inset auto 0 15%; z-index 0" },
+      { "selector": ".entry > *", "position": "z-index 1" },
+      { "selector": ".mast:after", "position": "absolute decoration; right 3vw; bottom -7vw" },
+      { "selector": ".product>img", "position": "grid-spanning image; vertically centered" },
+      { "selector": ".model", "position": "absolute within scene; centered with bottom -15px" },
+      { "selector": ".model img", "position": "absolute; z-index 3; coordinates from outfit data" }
+    ],
+    "grids": [
+      { "selector": ".product", "columns": "1fr 1fr", "image": "spans both columns", "copy": "second column aligned end" },
+      { "selector": ".build-controls", "columns": "repeat(3,1fr)", "gap": "15px" },
+      { "selector": ".size-grid", "columns": "1fr 1fr" },
+      { "selector": ".drop", "columns": "1.5fr 1fr" },
+      { "selector": ".member-grid", "columns": "1.4fr .9fr", "gap": "50px" },
+      { "selector": ".wall", "columns": "repeat(2,1fr)" }
+    ],
+    "overflow": "Entry and product section clip overflow; scene clips model/content; page otherwise scrolls naturally. No explicit custom scrollbar or nested scroll region.",
+    "zIndex": [{ "selector": "body:before", "value": 30 }, { "selector": "header", "value": 10 }, { "selector": ".entry:after", "value": 0 }, { "selector": ".entry>*", "value": 1 }, { "selector": ".mast:after", "value": "not explicitly set" }, { "selector": ".product-copy", "value": 2 }, { "selector": ".model img", "value": 3 }, { "selector": ".scene-label", "value": 2 }]
+  },
+  "frontendLogicAndData": {
+    "routing": "Next.js App Router with one page route at /. In-page navigation uses anchors; no router API or additional route found.",
+    "stateManagement": "React useState/useMemo/useEffect local component state; no global store, server actions, or persistence found.",
+    "dataAccess": { "file": "lib/data.ts", "behavior": "Imports local JSON and returns chart, shallow-cloned drop object, and shallow-cloned members array." },
+    "seedData": {
+      "outfits": { "file": "data/outfits.json", "items": ["CUT 01 / CROPPED TEE / x50 y57 scale1.05", "CUT 02 / WIDE SHIRT / x50 y55 scale0.95", "CUT 03 / RAW JACKET / x50 y59 scale1.12"] },
+      "sizeChart": { "file": "data/size-chart.json", "items": ["S 68-76cm; holes 70,72.5,75,77.5,80", "M 77-86cm; holes 80,82.5,85,87.5,90", "L 87-96cm; holes 90,92.5,95,97.5,100"], "caveat": "Repository notes identify these values as placeholders requiring measurement validation." },
+      "drop": { "file": "data/drops.json", "value": "DROP 001; startsAt 2026-12-01T20:00:00+02:00; 47 units", "caveat": "Repository notes identify time and inventory as fake prototype data." },
+      "members": { "file": "data/members.json", "initialEntries": ["#0042 H.M.", "#0037 R.A.", "#0029 S.K.", "#0018 M.N.", "#0009 Y.E."], "caveat": "Fake seed entries; no backend or persistence." }
+    },
+    "integrations": ["Google Fonts stylesheet only external frontend dependency observed", "No backend/API, account, analytics, payment provider, or client-side icon/animation package observed"],
+    "sensitiveConfiguration": "No secret values documented; package manifest and inspected UI source contain no credentials."
+  },
+  "implementationReferences": [
+    { "feature": "Document shell and metadata", "path": "app/layout.tsx", "symbols": ["metadata", "RootLayout"] },
+    { "feature": "Route composition", "path": "app/page.tsx", "symbols": ["Page", "VetoPrototype"] },
+    { "feature": "All visual tokens, layout, states, breakpoints, effects and keyframes", "path": "app/globals.css", "symbols": [":root", ".entry", "@keyframes snake", "@keyframes lock", "header", ".mast", ".product", ".builder", ".size-finder", ".drop", ".members", "@media"] },
+    { "feature": "Interactive components, language, controls and behaviors", "path": "components/VetoPrototype.tsx", "symbols": ["copy", "Entry", "VetoPrototype", "BeltSections", "OutfitSwitcher", "SizeFinder", "Drop", "Members"] },
+    { "feature": "Local JSON data boundary", "path": "lib/data.ts", "symbols": ["getSizeChart", "getDrop", "getMembers"] },
+    { "feature": "Builder positioning data", "path": "data/outfits.json" },
+    { "feature": "Size ranges and holes", "path": "data/size-chart.json" },
+    { "feature": "Countdown seed", "path": "data/drops.json" },
+    { "feature": "Member wall seed", "path": "data/members.json" }
+  ],
+  "auditFindings": {
+    "verifiedFromSource": ["Route and component composition", "CSS values and responsive rules", "interactive state and calculation logic", "JSON seed values", "asset source references", "asset dimensions and formats from local metadata", "selected public WebP assets byte-identical to temp_assets WebP copies"],
+    "notRuntimeVerified": ["Actual appearance at viewport sizes and browser font rendering", "Focus-visible behavior and keyboard interaction in browser", "Network success and exact rendered Google Font files", "Loading timing and image decode behavior on real devices", "Browser-specific CSS support and visual blending results"],
+    "unusedAssetEvidence": ["All three public buckle-only WebPs and public preview-aligned.png have no source reference", "temp_assets contains source/reference copies not loaded by frontend", "No logo image supplied or loaded; wordmark is text/CSS"],
+    "inconsistenciesAndRisks": [
+      "--ash is defined but unused in the inspected stylesheet.",
+      "Rubik is requested by the font import but no CSS rule uses it.",
+      "The top navigation omits the Members section even though it has id=members.",
+      "At mobile breakpoint nav hides SIZE and DROP links; their sections remain reachable by scrolling/product action.",
+      "Size out-of-range inputs silently use the second chart row; hole selection then compares waist centimeters directly to chart hole values.",
+      "Arabic document direction is set, but most layout behavior remains CSS grid/flex plus limited logical properties; complete Arabic visual correctness needs runtime review.",
+      "Entry preload counts errors as completed and still reveals Enter; it does not provide a broken-asset state.",
+      "Drop inventory and member submissions are simulated/local only; no real stock or persistence integration exists.",
+      "Several interaction states are implicit only: no explicit focus, disabled, loading or form error styling beyond browser defaults and selected active buttons."
+    ],
+    "coverage": { "applicationRoutes": "All routes found in source inspected; only / exists.", "majorComponents": "All named and composed frontend components inspected.", "stylesheets": "All app stylesheet inspected; no other app CSS/SCSS files found.", "assets": "All image files in public/ and temp_assets/ enumerated; nonvisual .DS_Store identified.", "remaining": "Runtime appearance and browser-only states remain unverified." }
+  }
+}
