@@ -1,5 +1,5 @@
 [
-  {"id":"cut","name":"CUT 01","top":"CROPPED TEE","belt":{"x":50,"y":57,"scale":1.05}},
-  {"id":"wide","name":"CUT 02","top":"WIDE SHIRT","belt":{"x":50,"y":55,"scale":0.95}},
-  {"id":"raw","name":"CUT 03","top":"RAW JACKET","belt":{"x":50,"y":59,"scale":1.12}}
+  {"id":"cut-01","name":"CUT 01","top":"CROPPED TEE"},
+  {"id":"cut-02","name":"CUT 02","top":"WIDE SHIRT"},
+  {"id":"cut-03","name":"CUT 03","top":"RAW JACKET"}
 ]

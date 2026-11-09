@@ -1,0 +1,115 @@
+{
+ "note": "pixel positions inside the 4500x680 full-res images. Multiply by (web_width/4500) for the web copies (2200px wide => 0.4889).",
+ "image_full_res": [
+  4500,
+  680
+ ],
+ "web_width": 2200,
+ "web_scale": 0.48889,
+ "row_center": 340,
+ "entry_left": {
+  "image": "belt-<c>-entry-left-noprong",
+  "buckle_on": "right edge",
+  "frame_cols": [
+   3760,
+   4400
+  ],
+  "attached_bar_cols": [
+   3760,
+   3870
+  ],
+  "front_bar_cols": [
+   4305,
+   4400
+  ],
+  "opening_cols": [
+   3870,
+   4305
+  ],
+  "prong_pivot": [
+   3815,
+   340
+  ],
+  "prong_tip_closed": [
+   4275,
+   340
+  ],
+  "strap_center_row": 340,
+  "strap_height_px": 400,
+  "keeper_cols": [
+   [
+    3586,
+    3674
+   ],
+   [
+    3336,
+    3424
+   ]
+  ],
+  "layers_above_tail": "the WHOLE buckle frame (clip of entry-left-noprong, cols 3760-4400) + the two keeper clips (keeper_cols) + the prong. The tail runs UNDER these and OVER the rest of the strap, so the frame always looks complete.",
+  "lock_hole": "the tail hole that lands at col 4275 (the prong tip)",
+  "frame_clip_cols": [
+   3760,
+   4400
+  ]
+ },
+ "entry_prong": {
+  "image": "entry-prong",
+  "same_canvas_as": "entry-left",
+  "transform_origin_px": [
+   3815,
+   340
+  ],
+  "closed_pose": "scaleX 1",
+  "lifted_pose": "scaleX ~0.5 with slight upward shift; animate to 1 for the click",
+  "closed_tip_px": [
+   4275,
+   340
+  ]
+ },
+ "entry_right": {
+  "image": "belt-<c>-entry-right",
+  "tip_on": "left edge",
+  "tip_col": 60,
+  "hole_cols": [
+   1850,
+   2100,
+   2350,
+   2600,
+   2850
+  ],
+  "hole_row": 340,
+  "hole_diameter_px": 46,
+  "strap_height_px": 400,
+  "note": "hole 0 is nearest the tip (17.5 cm from it); holes are 2.5 cm = 250px apart",
+  "align_formula": "tail_offset_x = 4275 - (1850 + 250*k)  (full-res px, applied to the entry-right image); k = 0..4. k=2 gives 1925."
+ },
+ "free_end": {
+  "image": "belt-<c>-free-end",
+  "tip_on": "right edge",
+  "hole_cols": [
+   2650,
+   2400,
+   2150,
+   1900,
+   1650
+  ],
+  "hole_row": 340,
+  "hole_fraction_x": [
+   0.589,
+   0.533,
+   0.478,
+   0.422,
+   0.367
+  ],
+  "hole_fraction_y": 0.5
+ },
+ "scale": "1 cm = 100 px; strap 4 cm = 400 px; buckle frame 6.4 cm",
+ "layer_order_bottom_to_top": [
+  "entry-left-noprong (strap + buckle)",
+  "entry-right (tail)",
+  "clip of entry-left-noprong cols 3760-4400 (frame)",
+  "clips of the 2 keepers",
+  "entry-prong"
+ ]
+}

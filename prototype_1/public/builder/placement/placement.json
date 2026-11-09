@@ -1,0 +1,55 @@
+{
+  "canvas": [
+    896,
+    1200
+  ],
+  "note": "Belt layer must be the same 896x1200 canvas as the outfit, drawn at 0,0, with mask-image = belt-mask-<cut>.png",
+  "strap": {
+    "center_y": 506,
+    "height": 34,
+    "top": 489,
+    "bottom": 523,
+    "center_x": 452
+  },
+  "buckle": {
+    "center_x": 452,
+    "center_y": 506,
+    "frame_width": 60,
+    "frame_height": 48,
+    "note": "scale the buckle so the FRAME is ~60px wide, not the whole image; ~18% of the waistband"
+  },
+  "waistband": {
+    "top": 487,
+    "bottom": 526,
+    "left_edge": 290,
+    "right_edge": 620,
+    "width": 330
+  },
+  "cuts": {
+    "cut-01": {
+      "visible_x": [
+        296,
+        612
+      ],
+      "occlusion": "tank hem covers top edge of the band at the sides",
+      "mask": "belt-mask-cut-01.png"
+    },
+    "cut-02": {
+      "visible_x": [
+        368,
+        532
+      ],
+      "occlusion": "shirt panels cover everything outside the center gap",
+      "mask": "belt-mask-cut-02.png"
+    },
+    "cut-03": {
+      "visible_x": [
+        364,
+        536
+      ],
+      "occlusion": "jacket panels cover everything outside the center gap",
+      "mask": "belt-mask-cut-03.png"
+    }
+  },
+  "scale_to_display": "displayed_px = canvas_px * (model_display_width / 896)"
+}

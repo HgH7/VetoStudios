@@ -1,0 +1,20 @@
+{
+  "units": "centimetres (1 unit = 1 cm), glTF Y-up, belt runs along X, width along Z, thickness along Y",
+  "files": ["veto-belt-red.glb", "veto-belt-black.glb", "veto-belt-white.glb"],
+  "nodes": {
+    "strap_left":   {"role": "buckle-side strap section (38 cm)", "origin": "world origin, buckle end at x=+0.3", "animate": "position.x"},
+    "buckle_frame": {"role": "chrome frame, stepped bevel", "origin": "frame spans x 0..3.5", "animate": "move together with strap_left"},
+    "buckle_prong": {"role": "chrome prong with peg", "origin": "PIVOT at the back bar (0.275, 0.1, 0)", "animate": "rotation.z (positive lifts the tip). Locked = 0, open = +0.7 rad"},
+    "keeper":       {"role": "leather keeper loop", "origin": "x=-3.6", "animate": "move together with strap_left"},
+    "strap_right":  {"role": "free end (38 cm) with 5 holes at 6, 8.5, 11, 13.5, 16 cm from the tip", "origin": "TIP at node origin", "animate": "position.x / position.y"}
+  },
+  "poses": {
+    "locked": {"strap_right.position": [-9.25, 0.575, 0], "buckle_prong.rotation.z": 0, "note": "hole #3 sits under the prong peg at x=1.75"},
+    "open_suggestion": {"strap_left.group.position.x": -45, "strap_right.position.x": 45, "buckle_prong.rotation.z": 0.7}
+  },
+  "notes": [
+    "The right strap rests ON TOP of the left strap in the locked pose (simplified buckle path). A convincing pass-through needs a keyframed path: under the front bar, up, then over.",
+    "Placeholder buckle design. Replace with your real hardware when you have photos.",
+    "Leather: procedural croc-style emboss + edge stitching; textures 1536x768 embedded in the GLB."
+  ]
+}
