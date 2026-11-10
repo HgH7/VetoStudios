@@ -1,19 +1,13 @@
 'use client';
 
 import gsap from 'gsap';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import outfits from '@/data/outfits.json';
 import beltGeometry from '../public/belts/geometry.json';
 import { getDrop, getMembers, getSizeChart } from '@/lib/data';
-
-type Lang = 'en' | 'ar';
-const copy = {
-  en: { enter:'ENTER', nav:'MENU', belts:'BELTS', build:'BUILD', size:'SIZE', drop:'DROP', members:'MEMBERS', refuse:'REFUSE BASIC.', price:'EGP 1,900', finder:'FIND MY SIZE', add:'ADD TO WALL', waist:'WAIST', cm:'CM', inch:'IN', rec:'RECOMMENDED', hole:'USE HOLE', scenes:'SCENE', outfit:'OUTFIT', belt:'BELT', payment:'PAYMENT OPTIONS', cod:'CASH ON DELIVERY', card:'CARD', wallet:'MOBILE WALLET', join:'JOIN THE WALL', name:'YOUR NAME', hide:'HIDE ME FROM THE WALL', locked:'BUCKLE LOCKED', remaining:'UNITS REMAINING', starts:'DROP STARTS IN', live:'SIMULATED LIVE DATA', rule:['RULE 01: DON’T.','RULE 02: STAY SHARP.','RULE 03: KEEP IT CLEAN.'], choice:'CHOOSE A BELT', noWall:'YOUR NUMBER IS PRIVATE.' },
-  ar: { enter:'ادخل', nav:'قائمة', belts:'الأحزمة', build:'ركّب', size:'المقاس', drop:'الإصدار', members:'الأعضاء', refuse:'ارفض العادي.', price:'١٩٠٠ ج.م', finder:'اعرف مقاسك', add:'أضف إلى الجدار', waist:'محيط الخصر', cm:'سم', inch:'بوصة', rec:'المقاس المقترح', hole:'استخدم الفتحة', scenes:'المشهد', outfit:'الملبس', belt:'الحزام', payment:'خيارات الدفع', cod:'الدفع عند الاستلام', card:'بطاقة', wallet:'محفظة إلكترونية', join:'انضم إلى الجدار', name:'اسمك', hide:'أخفني من الجدار', locked:'تم قفل البَكْلة', remaining:'قطعة متبقية', starts:'يبدأ الإصدار خلال', live:'بيانات تجريبية مباشرة', rule:['القاعدة ٠١: لا.','القاعدة ٠٢: كن حاداً.','القاعدة ٠٣: ابقَ نظيفاً.'], choice:'اختر حزاماً', noWall:'رقمك خاص.' }
-} as const;
-type Text = typeof copy.en | typeof copy.ar;
-
-function Wordmark() { return <a href="#top" className="wordmark" aria-label="VETO home">VETO</a>; }
+import { copy, type Text } from './copy';
+import { useLang } from './LangProvider';
+import SiteHeader from './SiteHeader';
 
 const entryAssets = [
  '/belts/red/belt-red-entry-left-noprong.webp',
@@ -127,12 +121,11 @@ function Entry({onEnter, t}:{onEnter:()=>void;t:Text}) {
 }
 
 export default function VetoPrototype(){
- const [entered,setEntered]=useState(false),[lang,setLang]=useState<Lang>('en'); const t=copy[lang];
- useEffect(()=>{document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';},[lang]);
- return !entered ? <Entry onEnter={()=>setEntered(true)} t={t}/> : <div id="top" className="site"><header><Wordmark/><nav><a href="#belts">{t.belts}</a><a href="#build">{t.build}</a><a href="#size">{t.size}</a><a href="#drop">{t.drop}</a><button className="lang" onClick={()=>setLang(lang==='en'?'ar':'en')}>{lang==='en'?'ع':'EN'}</button></nav></header><section className="mast"><p className="kicker">LOCAL / LEATHER / 2026</p><h1>{t.refuse}</h1></section><BeltSections t={t}/><OutfitSwitcher t={t}/><SizeFinder t={t}/><Drop t={t}/><Members t={t}/><section className="payments"><p className="kicker">{t.payment}</p><div><span>01 / {t.cod}</span><span>02 / {t.card}</span><span>03 / {t.wallet}</span></div></section></div>;
+ const [entered,setEntered]=useState(false); const {lang,setLang}=useLang(); const t=copy[lang];
+ return !entered ? <Entry onEnter={()=>setEntered(true)} t={t}/> : <div id="top" className="site"><SiteHeader t={t} lang={lang} onToggleLang={()=>setLang(lang==='en'?'ar':'en')} home/><section className="mast"><p className="kicker">LOCAL / LEATHER / 2026</p><h1>{t.refuse}</h1></section><BeltSections t={t}/><OutfitSwitcher t={t}/><SizeFinder t={t}/><Drop t={t}/><Members t={t}/><section className="payments"><p className="kicker">{t.payment}</p><div><span>01 / {t.cod}</span><span>02 / {t.card}</span><span>03 / {t.wallet}</span></div></section></div>;
 }
 
-function BeltSections({t}:{t:Text}) { const colors=['RED','BLACK','WHITE']; return <section id="belts" className="belt-sections">{colors.map((color,i)=>{const shade=color.toLowerCase();return <article className={'product '+shade} key={color}><div className="product-index">0{i+1} / {color}</div><div className={`product-art product-art--${shade}`}><img className="showcase-half" src={`/belts/${shade}/belt-${shade}-buckle-half.webp`} alt={`VETO ${shade} leather belt with silver buckle`} width="2200" height="332" loading={i===0?'eager':'lazy'} decoding="async"/><img className="showcase-free" src={`/belts/${shade}/belt-${shade}-free-end.webp`} alt={`VETO ${shade} belt's perforated free end and tip`} width="2200" height="332" loading="lazy" decoding="async"/></div><div className="product-copy"><h2>{color}</h2><p className="price">{t.price}</p><a href="#size" className="outline">{t.finder} →</a></div></article>})}</section> }
+function BeltSections({t}:{t:Text}) { const colors=['RED','BLACK','WHITE']; return <section id="belts" className="belt-sections">{colors.map((color,i)=>{const shade=color.toLowerCase();return <article className={'product '+shade} key={color}><div className="product-index">0{i+1} / {color}</div><div className={`product-art product-art--${shade}`}><img className="showcase-half" src={`/belts/${shade}/belt-${shade}-buckle-half.webp`} alt={`VETO ${shade} leather belt with silver buckle`} width="2200" height="332" loading={i===0?'eager':'lazy'} decoding="async"/><img className="showcase-free" src={`/belts/${shade}/belt-${shade}-free-end.webp`} alt={`VETO ${shade} belt's perforated free end and tip`} width="2200" height="332" loading="lazy" decoding="async"/></div><div className="product-copy"><h2>{color}</h2><p className="price">{t.price}</p><a href="#size" className="outline">{t.finder} →</a><a href={`/belts/${shade}`} className="outline">{t.viewBelt} →</a></div></article>})}</section> }
 
 type BuilderSelection = { scene: string; outfit: number; belt: string };
 
@@ -180,7 +173,61 @@ function OutfitSwitcher({t}:{t:Text}) {
  </section>;
 }
 
-function SizeFinder({t}:{t:Text}){const [unit,setUnit]=useState<'cm'|'in'>('cm'),[value,setValue]=useState(82);const cm=unit==='cm'?value:value*2.54;const item=useMemo(()=>getSizeChart().find(x=>cm>=x.min&&cm<=x.max) || getSizeChart()[1],[cm]);const closest=item.holes.reduce((a,b)=>Math.abs(b-cm)<Math.abs(a-cm)?b:a);const hole=item.holes.indexOf(closest)+1;const holeX=beltGeometry.free_end.hole_fraction_x[5-hole]*100;const holeY=beltGeometry.free_end.hole_fraction_y*100;return <section id="size" className="size-finder"><div className="section-heading"><p className="kicker">03 / {t.size}</p><h2>{t.finder}</h2></div><div className="size-grid"><div><label>{t.waist}<input type="number" min="1" value={value} onChange={e=>setValue(Number(e.target.value))}/></label><div className="unit"><button className={unit==='cm'?'active':''} onClick={()=>setUnit('cm')}>{t.cm}</button><button className={unit==='in'?'active':''} onClick={()=>setUnit('in')}>{t.inch}</button></div></div><div className="result"><p>{t.rec}</p><strong>{item.size}</strong><span>{t.hole} {hole}/5</span><div className="hole-visual"><img src="/belts/red/belt-red-free-end.webp" alt="Red belt free end with five sizing holes and tip on the right" width="2200" height="332" loading="lazy" decoding="async"/><i className="hole-ring" style={{left:`${holeX}%`,top:`${holeY}%`}} aria-hidden="true"/></div></div></div></section>}
+function SizeFinder({t}:{t:Text}) {
+ const chart=getSizeChart();
+ const [mode,setMode]=useState<'waist'|'body'>('waist');
+ const [unit,setUnit]=useState<'cm'|'in'>('cm');
+ const [waist,setWaist]=useState('82');
+ const [height,setHeight]=useState('');
+ const [weight,setWeight]=useState('');
+ const waistValue=waist.trim()===''?Number.NaN:Number(waist)*(unit==='cm'?1:2.54);
+ const heightValue=height.trim()===''?Number.NaN:Number(height);
+ const weightValue=weight.trim()===''?Number.NaN:Number(weight);
+ const bodyInputsValid=Number.isFinite(heightValue)&&Number.isFinite(weightValue)&&heightValue>=chart.limits.height[0]&&heightValue<=chart.limits.height[1]&&weightValue>=chart.limits.weight[0]&&weightValue<=chart.limits.weight[1];
+ const waistInputsValid=Number.isFinite(waistValue)&&waistValue>=chart.limits.waist[0]&&waistValue<=chart.limits.waist[1];
+ const inputsValid=mode==='waist'?waistInputsValid:bodyInputsValid;
+ const estimatedWaist=mode==='body'&&bodyInputsValid?chart.estimate.slope*(weightValue/((heightValue/100)**2))+chart.estimate.intercept:Number.NaN;
+ const targetWaist=mode==='waist'?waistValue:estimatedWaist;
+ const inSizeRange=inputsValid&&targetWaist>=chart.range.min&&targetWaist<=chart.range.max;
+ const selectedSize=inSizeRange?chart.sizes.reduce((best,size)=>{
+  const bestDistance=Math.abs(best.holes[2]-targetWaist);
+  const distance=Math.abs(size.holes[2]-targetWaist);
+  return distance<bestDistance||(distance===bestDistance&&size.size>best.size)?size:best;
+ },chart.sizes[0]):null;
+ const nearBoundary=inSizeRange&&[90,97.5].some(boundary=>Math.abs(targetWaist-boundary)<=1.5);
+ const invalidMessage=!inputsValid?t.invalidInput:null;
+ return <section id="size" className="size-finder">
+  <div className="section-heading"><p className="kicker">03 / {t.size}</p><h2>{t.finder}</h2></div>
+  <div className="size-grid">
+   <div className="size-inputs">
+    <div className="unit size-mode" role="group" aria-label="Sizing method">
+     <button type="button" className={mode==='waist'?'active':''} aria-pressed={mode==='waist'} onClick={()=>setMode('waist')}>{t.waistMode}</button>
+     <button type="button" className={mode==='body'?'active':''} aria-pressed={mode==='body'} onClick={()=>setMode('body')}>{t.bodyMode}</button>
+    </div>
+    {mode==='waist'?<>
+    <label>{t.waistMode}<input type="number" min={chart.limits.waist[0]} max={chart.limits.waist[1]} step="any" inputMode="decimal" value={waist} onChange={event=>setWaist(event.target.value)} /></label>
+     <div className="unit" role="group" aria-label="Waist units">
+      <button type="button" className={unit==='cm'?'active':''} aria-pressed={unit==='cm'} onClick={()=>setUnit('cm')}>{t.cm}</button>
+      <button type="button" className={unit==='in'?'active':''} aria-pressed={unit==='in'} onClick={()=>setUnit('in')}>{t.inch}</button>
+     </div>
+    </>:<div className="body-inputs">
+     <label>{t.height}<input type="number" min={chart.limits.height[0]} max={chart.limits.height[1]} step="any" inputMode="decimal" value={height} onChange={event=>setHeight(event.target.value)} /></label>
+     <label>{t.weight}<input type="number" min={chart.limits.weight[0]} max={chart.limits.weight[1]} step="any" inputMode="decimal" value={weight} onChange={event=>setWeight(event.target.value)} /></label>
+    </div>}
+   </div>
+   <div className="result" aria-live="polite" aria-atomic="true">
+    {invalidMessage?<p className="size-message" role="status">{invalidMessage}</p>:!inSizeRange?<p className="size-message" role="status">{t.outsideRange}</p>:selectedSize&&<>
+     <p>{t.yourSize}</p>
+     <strong>{selectedSize.size}</strong>
+     <span>{t.fitsWaist} {selectedSize.holes[0]}-{selectedSize.holes[4]} cm</span>
+     {nearBoundary&&<span className="size-message">{t.betweenSizes}</span>}
+     {mode==='body'&&<small>{t.estimateNote}</small>}
+     <div className="hole-visual" aria-hidden="true"><img src="/belts/red/belt-red-free-end.webp" alt="" width="2200" height="332" loading="lazy" decoding="async" /></div>
+    </>}
+   </div>
+  </div>
+ </section>;
+}
 
 function Drop({t}:{t:Text}){const d=getDrop();const [units,setUnits]=useState(d.unitsRemaining),[now,setNow]=useState(Date.now());useEffect(()=>{const tick=setInterval(()=>setNow(Date.now()),1000);const sale=setInterval(()=>setUnits(n=>Math.max(0,n-1)),7000+Math.random()*6000);return()=>{clearInterval(tick);clearInterval(sale)}},[]);const diff=Math.max(0,new Date(d.startsAt).getTime()-now);const time=[Math.floor(diff/86400000),Math.floor(diff/3600000)%24,Math.floor(diff/60000)%60,Math.floor(diff/1000)%60].map(x=>String(x).padStart(2,'0')).join(':');return <section id="drop" className="drop"><img className="drop-buckle" src="/belts/red/belt-red-buckle-macro.webp" alt="Close-up of the red VETO belt buckle" width="1400" height="1221" loading="lazy" decoding="async"/><div><p className="kicker">04 / {d.name}</p><h2>{t.starts}</h2><output>{time}</output></div><div className="remaining"><p>{t.remaining}</p><strong>{String(units).padStart(3,'0')}</strong><small>{t.live}</small></div></section>}
 

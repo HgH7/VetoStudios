@@ -1,0 +1,29 @@
+{
+  "red": {
+    "name": {"en": "RED", "ar": "أحمر"},
+    "facts": {
+      "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
+      "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
+      "hardware": {"en": "[TO CONFIRM] Hardware finish and composition.", "ar": "[TO CONFIRM] تشطيب ومكونات القطع المعدنية."},
+      "delivery": {"en": ["[TO CONFIRM] Dispatch timing.", "[TO CONFIRM] Delivery coverage and fees.", "[TO CONFIRM] Return conditions."], "ar": ["[TO CONFIRM] موعد الشحن.", "[TO CONFIRM] نطاق ورسوم التوصيل.", "[TO CONFIRM] شروط الإرجاع."]}
+    }
+  },
+  "black": {
+    "name": {"en": "BLACK", "ar": "أسود"},
+    "facts": {
+      "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
+      "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
+      "hardware": {"en": "[TO CONFIRM] Hardware finish and composition.", "ar": "[TO CONFIRM] تشطيب ومكونات القطع المعدنية."},
+      "delivery": {"en": ["[TO CONFIRM] Dispatch timing.", "[TO CONFIRM] Delivery coverage and fees.", "[TO CONFIRM] Return conditions."], "ar": ["[TO CONFIRM] موعد الشحن.", "[TO CONFIRM] نطاق ورسوم التوصيل.", "[TO CONFIRM] شروط الإرجاع."]}
+    }
+  },
+  "white": {
+    "name": {"en": "WHITE", "ar": "أبيض"},
+    "facts": {
+      "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
+      "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
+      "hardware": {"en": "[TO CONFIRM] Hardware finish and composition.", "ar": "[TO CONFIRM] تشطيب ومكونات القطع المعدنية."},
+      "delivery": {"en": ["[TO CONFIRM] Dispatch timing.", "[TO CONFIRM] Delivery coverage and fees.", "[TO CONFIRM] Return conditions."], "ar": ["[TO CONFIRM] موعد الشحن.", "[TO CONFIRM] نطاق ورسوم التوصيل.", "[TO CONFIRM] شروط الإرجاع."]}
+    }
+  }
+}
