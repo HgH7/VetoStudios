@@ -105,6 +105,12 @@ header{background:rgba(243,240,232,.93)}
 .product-art img{position:relative;display:block;height:auto;max-width:none;filter:none;mix-blend-mode:normal;object-fit:contain}
 .product .showcase-half{width:min(85vw,1224px);margin-left:2vw;filter:drop-shadow(0 5px 5px rgba(17,17,17,.22))}
 .product .showcase-free{width:min(74vw,1065px);margin-left:8vw;filter:drop-shadow(0 5px 5px rgba(17,17,17,.22))}
+.belt-sections .product-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.belt-sections .product-action{display:inline-flex;min-height:44px;align-items:center;justify-content:center;gap:12px;padding:0 13px;border:1px solid var(--ink);color:var(--ink);font:500 10px/1 'IBM Plex Mono',monospace;text-decoration:none;white-space:nowrap;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+.belt-sections .product-action--primary{background:var(--ink);color:var(--paper)}
+.belt-sections .product-action:hover{background:#333;color:var(--paper);border-color:#333}
+.belt-sections .product-action:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.belt-sections .product-action span{font-size:15px;line-height:1}
 .size-finder .hole-visual{position:relative;width:min(100%,560px);aspect-ratio:2200/332;margin-top:18px}
 .size-finder .hole-visual img{display:block;width:100%;height:100%;object-fit:contain}
 .size-finder .size-inputs{display:grid;align-content:start;gap:18px}
@@ -137,26 +143,29 @@ html[dir=rtl] .size-finder .size-inputs label{text-align:right}
 .product-site{min-height:100vh;background:var(--paper)}
 .product-page{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);direction:ltr;align-items:start}
 .product-gallery{position:sticky;top:69px;height:calc(100svh - 69px);min-height:560px;padding:26px clamp(20px,4vw,58px) 12px;display:grid;grid-template-rows:minmax(0,1fr) 40px auto;align-content:stretch;justify-items:center;background:var(--paper)}
-.product-gallery-frame{width:min(100%,calc((100svh - 165px)*.8));height:auto;align-self:center;aspect-ratio:4/5;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-inline:contain;direction:ltr;outline-offset:2px}
-.product-gallery-frame::-webkit-scrollbar{display:none}
-.product-slide{position:relative;flex:0 0 100%;width:100%;height:100%;aspect-ratio:4/5;overflow:hidden;scroll-snap-align:start;background:#f3f0e8}
-.wide-slide{display:grid;place-items:center;background:var(--paper)}
-.wide-slide img{display:block;width:245%;height:auto;max-height:70%;object-fit:contain;filter:drop-shadow(0 8px 7px rgba(17,17,17,.15))}
-.full-slide img{transform:translateX(30%) rotate(-20deg)}
-.free-slide img{transform:translateX(-15%) rotate(20deg)}
-.macro-slide img{width:100%;height:100%;object-fit:cover}
+.product-gallery-frame{width:min(100%,calc((100svh - 165px)*.8));height:auto;align-self:center;aspect-ratio:4/5;min-height:0;overflow:hidden;border:1px solid rgba(17,17,17,.12);background:color-mix(in srgb,var(--paper) 95%,var(--ink));direction:ltr;outline-offset:2px;touch-action:pan-y;user-select:none;cursor:grab}
+.product-gallery-frame:active{cursor:grabbing}
+.product-gallery-strip{display:flex;width:400%;height:100%;will-change:transform}
+.product-gallery-strip.is-rtl{flex-direction:row-reverse}
+.product-slide{position:relative;flex:0 0 25%;width:25%;height:100%;overflow:hidden;background:transparent}
+.full-slide img,.free-slide img{position:absolute;display:block;height:auto;max-width:none;object-fit:contain;filter:drop-shadow(0 8px 7px rgba(17,17,17,.15))}
+.full-slide img{top:62%;left:4%;width:280%;transform-origin:0 50%;transform:rotate(-15deg)}
+.free-slide img{top:22%;left:-49%;width:145%;transform-origin:0 50%;transform:rotate(12deg)}
+.macro-slide img{position:absolute;inset:8%;display:block;width:84%;height:84%;object-fit:contain}
 .worn-slide{background:#aaa;isolation:isolate}
-.worn-scene,.worn-outfit,.worn-belt,.worn-shadow img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.worn-scene,.worn-outfit,.worn-belt,.worn-shadow img{position:absolute;inset:0;width:100%;height:100%}
+.worn-scene{object-fit:cover;object-position:center 42%}
+.worn-outfit,.worn-belt,.worn-shadow img{object-fit:contain;object-position:center}
 .worn-scene{z-index:0}
 .worn-shadow{position:absolute;z-index:1;inset:0;filter:brightness(.2) blur(8px);opacity:.2;transform:translate(5px,7px)}
 .worn-model{position:absolute;z-index:2;inset:0}
 .worn-outfit{z-index:1}
 .worn-belt{z-index:2}
 .worn-grade{position:absolute;z-index:3;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(17,17,17,.12),transparent 40%),rgba(17,17,17,.04);mix-blend-mode:multiply}
-.gallery-track{width:min(100%,calc((100svh - 150px)*.8));height:40px;padding:19px 0;border:0;background:transparent;cursor:pointer;touch-action:manipulation}
-.gallery-track-line{position:relative;display:block;width:100%;height:2px;background:rgba(17,17,17,.15)}
-.gallery-track-line i{position:absolute;top:0;width:25%;height:2px;background:var(--ink);transition:left .08s linear}
-.gallery-live{justify-self:end;width:min(100%,calc((100svh - 150px)*.8));margin:0;color:var(--ink);font-size:10px;line-height:1.4;text-align:end}
+.gallery-track{position:relative;display:flex;width:calc(min(100%,calc((100svh - 165px)*.8)) - 2px);height:40px;align-items:center;padding:0;border:0;background:transparent;cursor:pointer;touch-action:none;outline-offset:2px}
+.gallery-track-line{position:relative;display:block;width:100%;height:2px;background:rgba(17,17,17,.15);pointer-events:none}
+.gallery-track-line i{position:absolute;top:-1px;width:18%;height:4px;background:var(--ink);pointer-events:none}
+.gallery-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .product-detail-column{min-width:0;direction:ltr}
 .product-details{padding:clamp(34px,5vw,72px) clamp(22px,5vw,76px) 18px;direction:inherit}
 html[dir=rtl] .product-details{direction:rtl}
@@ -177,7 +186,6 @@ html[dir=rtl] .product-range{direction:rtl}
 .product-size-link{display:inline-block;padding:8px 0;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);font:600 11px 'IBM Plex Mono',monospace;text-decoration:none;text-align:start}
 .cart-message{margin:12px 0 0;color:var(--ink);font-weight:600}
 .product-chapter>p:not(.kicker){max-width:48ch;line-height:1.8;text-transform:none}
-.chapter-macro{display:block;width:100%;height:auto;max-height:350px;object-fit:cover;margin-top:24px}
 .product-specs dl{margin:0}
 .product-specs dl>div{display:grid;grid-template-columns:minmax(100px,.7fr) 1.3fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
 .product-specs dt{font-size:10px}
@@ -201,8 +209,8 @@ html[dir=rtl] .product-range{direction:rtl}
  .product-page{grid-template-columns:minmax(0,1fr)}
  .product-gallery{position:relative;top:auto;height:auto;min-height:0;padding:22px 18px 10px;grid-template-rows:auto 40px auto}
  .product-gallery-frame{width:min(100%,520px);height:auto;aspect-ratio:4/5}
- .product-slide{height:auto;aspect-ratio:4/5}
- .gallery-track,.gallery-live{width:min(100%,520px)}
+ .product-gallery-strip,.product-slide{height:100%}
+ .gallery-track{width:calc(min(100%,520px) - 2px)}
  .product-detail-column{width:100%}
  .product-details{padding-top:42px}
 }
@@ -216,5 +224,6 @@ html[dir=rtl] .product-range{direction:rtl}
  .range-card img{min-height:0;height:88px}
  .product-actions{align-items:flex-start;flex-direction:column;gap:14px}
  .product-specs dl>div{grid-template-columns:minmax(86px,.65fr) 1.35fr}
+ .belt-sections .product-actions{flex-direction:row;align-items:stretch}
 }
-@media(prefers-reduced-motion:reduce){.gallery-track-line i{transition:none!important}.product-chapter{opacity:1!important;transform:none!important}}
+@media(prefers-reduced-motion:reduce){.belt-sections .product-action{transition:none}.product-chapter{opacity:1!important;transform:none!important}}

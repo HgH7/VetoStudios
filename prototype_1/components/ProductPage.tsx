@@ -17,66 +17,171 @@ const sizes: CartItem['size'][]=[85,95,100];
 
 function ProductGallery({color,lang}:{color:BeltColor;lang:Lang}) {
  const frameRef=useRef<HTMLDivElement>(null);
+ const stripRef=useRef<HTMLDivElement>(null);
+ const trackRef=useRef<HTMLDivElement>(null);
  const [active,setActive]=useState(0);
- const [progress,setProgress]=useState(0);
+ const activeRef=useRef(0);
+ const progressRef=useRef(0);
+ const targetRef=useRef(0);
+ const scheduleRenderRef=useRef<()=>void>(()=>{});
  const reduceMotion=useRef(false);
+ const dragRef=useRef<{pointerId:number;startX:number;startProgress:number;source:'gallery'|'track';moved:boolean}|null>(null);
+ const animationRef=useRef<{from:number;to:number;startedAt:number;duration:number}|null>(null);
  useEffect(()=>{
   const media=window.matchMedia('(prefers-reduced-motion: reduce)');
-  const update=()=>{reduceMotion.current=media.matches;};
+  const update=()=>{
+   reduceMotion.current=media.matches;
+   if(media.matches&&animationRef.current){
+    progressRef.current=targetRef.current;
+    animationRef.current=null;
+    scheduleRenderRef.current();
+   }
+  };
   update();media.addEventListener('change',update);
   return()=>media.removeEventListener('change',update);
  },[]);
- const scrollToIndex=(index:number)=>{
-  const frame=frameRef.current;
-  if(!frame)return;
-  const target=frame.children[index] as HTMLElement|undefined;
-  target?.scrollIntoView({behavior:reduceMotion.current?'instant':'smooth',block:'nearest',inline:'start'});
+ const clampProgress=(value:number)=>Math.max(0,Math.min(1,value));
+ const animateTo=(value:number,duration=600)=>{
+  const to=clampProgress(value);
+  targetRef.current=to;
+  if(reduceMotion.current){progressRef.current=to;animationRef.current=null;scheduleRenderRef.current();return;}
+  animationRef.current={from:progressRef.current,to,startedAt:performance.now(),duration};
+  scheduleRenderRef.current();
  };
- const updateActive=()=>{
-  const frame=frameRef.current;
-  if(!frame)return;
-    const maxScroll=frame.scrollWidth-frame.clientWidth;
-    const currentProgress=maxScroll>0?Math.max(0,Math.min(1,frame.scrollLeft/maxScroll)):0;
-    setProgress(currentProgress);
-    setActive(Math.round(currentProgress*3));
- };
+ const settle=()=>animateTo(Math.round(targetRef.current*3)/3);
  const keyDown=(event:React.KeyboardEvent<HTMLDivElement>)=>{
   if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
   event.preventDefault();
-  const isRtl=document.documentElement.dir==='rtl';
-  const delta=(event.key==='ArrowRight'?1:-1)*(isRtl?-1:1);
-  scrollToIndex(Math.max(0,Math.min(3,active+delta)));
+  const delta=(event.key==='ArrowRight'?1:-1)*(lang==='ar'?-1:1);
+  animateTo(Math.max(0,Math.min(3,Math.round(targetRef.current*3)+delta))/3);
  };
- const positionTrack=(event:React.MouseEvent<HTMLButtonElement>)=>{
-  const rect=event.currentTarget.getBoundingClientRect();
-  const physical=Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
-  const logical=document.documentElement.dir==='rtl'?1-physical:physical;
-  scrollToIndex(Math.round(logical*3));
+ const beginPointer=(event:React.PointerEvent<HTMLDivElement>,source:'gallery'|'track')=>{
+  if(event.button!==0&&event.pointerType==='mouse')return;
+  const frame=frameRef.current;
+  if(!frame)return;
+  let startProgress=progressRef.current;
+  animationRef.current=null;
+  targetRef.current=progressRef.current;
+  if(source==='track'){
+   const track=trackRef.current;
+   const thumb=track?.querySelector<HTMLElement>('.gallery-thumb');
+   const thumbRect=thumb?.getBoundingClientRect();
+   const onThumb=thumbRect&&event.clientX>=thumbRect.left&&event.clientX<=thumbRect.right;
+   if(track&&!onThumb){
+    const rect=track.getBoundingClientRect();
+    const thumbWidth=track.querySelector('.gallery-thumb')?.getBoundingClientRect().width??0;
+    const position=clampProgress((event.clientX-rect.left-thumbWidth/2)/Math.max(1,rect.width-thumbWidth));
+    startProgress=lang==='ar'?1-position:position;
+    animateTo(startProgress,350);
+    event.preventDefault();
+    return;
+   }
+  }
+  dragRef.current={pointerId:event.pointerId,startX:event.clientX,startProgress,source,moved:false};
+  event.currentTarget.setPointerCapture(event.pointerId);
+  scheduleRenderRef.current();
+  event.preventDefault();
  };
+ const movePointer=(event:React.PointerEvent<HTMLDivElement>,source:'gallery'|'track')=>{
+  const drag=dragRef.current;
+  const frame=frameRef.current;
+  if(!drag||drag.pointerId!==event.pointerId||drag.source!==source||!frame)return;
+  const track=trackRef.current;
+  const thumb=track?.querySelector<HTMLElement>('.gallery-thumb');
+  const range=track&&thumb?Math.max(1,track.clientWidth-thumb.offsetWidth):1;
+  const progressDelta=source==='track'
+   ?(event.clientX-drag.startX)/range*(lang==='ar'?-1:1)
+   :(event.clientX-drag.startX)/(frame.clientWidth*3)*(lang==='ar'?1:-1);
+  drag.moved=true;
+  targetRef.current=clampProgress(drag.startProgress+progressDelta);
+  animationRef.current=null;
+  scheduleRenderRef.current();
+  event.preventDefault();
+ };
+ const endPointer=(event:React.PointerEvent<HTMLDivElement>)=>{
+  const drag=dragRef.current;
+  if(drag?.pointerId!==event.pointerId)return;
+  dragRef.current=null;
+  if(drag.source==='gallery'||drag.moved){
+   progressRef.current=targetRef.current;
+   settle();
+  }
+ };
+ const photoLabel=lang==='en'?`Photo ${active+1} of 4`:`الصورة ${active+1} من 4`;
+ useEffect(()=>{
+  const frame=frameRef.current;
+  if(!frame)return;
+  let animationFrame=0;
+  let wheelSettle:ReturnType<typeof setTimeout>|null=null;
+  let schedule=()=>{};
+  const render=(time:number)=>{
+   animationFrame=0;
+   const animation=animationRef.current;
+   if(animation){
+    const elapsed=Math.min(1,(time-animation.startedAt)/animation.duration);
+    const eased=1-Math.pow(1-elapsed,3);
+    progressRef.current=animation.from+(animation.to-animation.from)*eased;
+    if(elapsed>=1)animationRef.current=null;
+   }else if(dragRef.current||reduceMotion.current){
+    progressRef.current=targetRef.current;
+   }else{
+    progressRef.current+=(targetRef.current-progressRef.current)*.22;
+    if(Math.abs(targetRef.current-progressRef.current)<.0005)progressRef.current=targetRef.current;
+   }
+   const progress=clampProgress(progressRef.current);
+   if(stripRef.current)stripRef.current.style.transform=lang==='ar'?`translate3d(calc(-75% + ${progress*75}%),0,0)`:`translate3d(${-progress*75}%,0,0)`;
+   const physical=lang==='ar'?1-progress:progress;
+   const thumb=trackRef.current?.querySelector<HTMLElement>('.gallery-thumb');
+   if(thumb)thumb.style.left=`${physical*82}%`;
+   const index=Math.round(progress*3);
+   if(index!==activeRef.current){activeRef.current=index;setActive(index);}
+   trackRef.current?.setAttribute('aria-valuenow',(progress*3).toFixed(2));
+   if(animationRef.current||dragRef.current||Math.abs(targetRef.current-progressRef.current)>=.0005)animationFrame=requestAnimationFrame(render);
+  };
+  schedule=()=>{if(!animationFrame)animationFrame=requestAnimationFrame(render);};
+  scheduleRenderRef.current=schedule;
+  const onWheel=(event:WheelEvent)=>{
+   if(Math.abs(event.deltaX)<=Math.abs(event.deltaY))return;
+   event.preventDefault();
+   targetRef.current=clampProgress(targetRef.current+(lang==='ar'?-1:1)*event.deltaX/(frame.clientWidth*3));
+   animationRef.current=null;
+   schedule();
+   if(wheelSettle)clearTimeout(wheelSettle);
+   wheelSettle=setTimeout(settle,140);
+  };
+  frame.addEventListener('wheel',onWheel,{passive:false});
+  schedule();
+  return()=>{
+   frame.removeEventListener('wheel',onWheel);
+   cancelAnimationFrame(animationFrame);
+   scheduleRenderRef.current=()=>{};
+   if(wheelSettle)clearTimeout(wheelSettle);
+  };
+ },[lang]);
  const altColor=products[color].name[lang];
- const fullAlt=lang==='en'?`${altColor} belt, full view`:`حزام ${altColor}، عرض كامل`;
+ const buckleHalfAlt=lang==='en'?`${altColor} belt buckle and strap`:`إبزيم حزام ${altColor} والحزام`;
  const buckleAlt=lang==='en'?`${altColor} belt buckle detail`:`تفاصيل إبزيم حزام ${altColor}`;
  const freeAlt=lang==='en'?`${altColor} belt holes and free end`:`فتحات حزام ${altColor} وطرفه`;
- const photoLabel=lang==='en'?`Photo ${active+1} of 4`:`الصورة ${active+1} من 4`;
  return <aside className="product-gallery" aria-label={lang==='en'?`${altColor} belt photos`:`صور حزام ${altColor}`}>
-  <div className="product-gallery-frame" ref={frameRef} role="region" aria-roledescription="carousel" aria-label={lang==='en'?'Product photos':'صور المنتج'} tabIndex={0} onKeyDown={keyDown} onScroll={updateActive}>
-  <div className="product-slide wide-slide full-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'1 of 4, full belt':'١ من ٤، الحزام كاملاً'}><img src={`/belts/${color}/belt-${color}-full.webp`} alt={fullAlt} width="2400" height="332" loading="eager" fetchPriority="high" decoding="async" /></div>
-  <div className="product-slide macro-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'2 of 4, buckle detail':'٢ من ٤، تفاصيل الإبزيم'}><img src={`/belts/${color}/belt-${color}-buckle-macro.webp`} alt={buckleAlt} width="1400" height="1221" loading="lazy" decoding="async" /></div>
-  <div className="product-slide wide-slide free-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'3 of 4, belt holes and tip':'٣ من ٤، فتحات الحزام والطرف'}><img src={`/belts/${color}/belt-${color}-free-end.webp`} alt={freeAlt} width="2400" height="332" loading="lazy" decoding="async" /></div>
-   <div className="product-slide worn-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'4 of 4, worn on model':'٤ من ٤، الحزام على العارض'}>
+  <div className="product-gallery-frame" ref={frameRef} role="region" aria-roledescription="carousel" aria-label={lang==='en'?'Product photos':'صور المنتج'} tabIndex={0} onKeyDown={keyDown} onPointerDown={event=>beginPointer(event,'gallery')} onPointerMove={event=>movePointer(event,'gallery')} onPointerUp={endPointer} onPointerCancel={endPointer}>
+   <div className={`product-gallery-strip${lang==='ar'?' is-rtl':''}`} ref={stripRef}>
+    <div className="product-slide wide-slide full-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'1 of 4, buckle and strap':'١ من ٤، الإبزيم والحزام'}><img draggable="false" src={`/belts/${color}/belt-${color}-buckle-half.webp`} alt={buckleHalfAlt} width="2200" height="332" loading="eager" fetchPriority="high" decoding="async" /></div>
+    <div className="product-slide macro-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'2 of 4, buckle detail':'٢ من ٤، تفاصيل الإبزيم'}><img draggable="false" src={`/belts/${color}/belt-${color}-buckle-macro.webp`} alt={buckleAlt} width="1400" height="1221" loading="lazy" decoding="async" /></div>
+    <div className="product-slide wide-slide free-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'3 of 4, belt holes and tip':'٣ من ٤، فتحات الحزام والطرف'}><img draggable="false" src={`/belts/${color}/belt-${color}-free-end.webp`} alt={freeAlt} width="2200" height="332" loading="lazy" decoding="async" /></div>
+    <div className="product-slide worn-slide" role="group" aria-roledescription="slide" aria-label={lang==='en'?'4 of 4, worn on model':'٤ من ٤، الحزام على العارض'}>
     <img className="worn-scene" src="/builder/scenes/street.webp" alt="" width="1264" height="843" loading="lazy" decoding="async" />
     <div className="worn-shadow"><img src="/builder/outfits/cut-01.png" alt="" width="896" height="1200" loading="lazy" decoding="async" /></div>
     <div className="worn-model"><img className="worn-outfit" src="/builder/outfits/cut-01.png" alt="" width="896" height="1200" loading="lazy" decoding="async" /><img className="worn-belt" src={`/builder/worn/worn-${color}-cut-01.png`} alt="" width="1792" height="2400" loading="lazy" decoding="async" /></div>
     <div className="worn-grade" aria-hidden="true" />
+    </div>
    </div>
   </div>
-  <button type="button" className="gallery-track" onClick={positionTrack} aria-label={lang==='en'?'Choose product photo':'اختر صورة المنتج'}>
-    <span className="gallery-track-line"><i style={{left:`${documentDirectionPosition(progress,lang)}%`}} /></span>
-  </button>
+  <div ref={trackRef} className="gallery-track" role="slider" tabIndex={0} aria-label={lang==='en'?'Choose product photo':'اختر صورة المنتج'} aria-valuemin={0} aria-valuemax={3} aria-valuenow={0} aria-valuetext={photoLabel} onKeyDown={keyDown} onPointerDown={event=>beginPointer(event,'track')} onPointerMove={event=>movePointer(event,'track')} onPointerUp={endPointer} onPointerCancel={endPointer}>
+    <span className="gallery-track-line"><i className="gallery-thumb" /></span>
+  </div>
   <p className="gallery-live" aria-live="polite" aria-atomic="true">{photoLabel}</p>
  </aside>;
 }
-function documentDirectionPosition(progress:number,lang:Lang) { return (lang==='ar'?1-progress:progress)*75; }
 
 export default function ProductPage({color,product}:Props) {
  const {lang,setLang}=useLang();
@@ -161,7 +266,7 @@ export default function ProductPage({color,product}:Props) {
       {message&&<p className="cart-message" role="status">{message}</p>}
       <div className="product-actions"><button className="product-cart" type="button" onClick={addItem}>{added?t.added:t.addToCart}</button><button className="product-size-link" type="button" onClick={openSizeDialog}>{t.finder} →</button></div>
      </section>
-     <section className="product-chapter" aria-labelledby="material-title"><p className="kicker">02 / VETO</p><h2 id="material-title">{t.materialCraft}</h2><p>{facts.material[lang]}</p><p>{facts.craft[lang]}</p><img className="chapter-macro" src={`/belts/${color}/belt-${color}-buckle-macro.webp`} alt={`${colorName} belt buckle close-up`} width="1400" height="1221" loading="lazy" decoding="async" /></section>
+     <section className="product-chapter" aria-labelledby="material-title"><p className="kicker">02 / VETO</p><h2 id="material-title">{t.materialCraft}</h2><p>{facts.material[lang]}</p><p>{facts.craft[lang]}</p></section>
     <section className="product-chapter product-specs" aria-labelledby="specs-title"><p className="kicker">03 / VETO</p><h2 id="specs-title">{t.specs}</h2><dl><div><dt>{t.width}</dt><dd>{lang==='en'?'4 cm':'٤ سم'}</dd></div><div><dt>{t.sizeLabel}</dt><dd>85 / 95 / 100</dd></div><div><dt>{t.holes}</dt><dd>{lang==='en'?'5 / 2.5 cm apart':'٥ / تفصل بينها ٢٫٥ سم'}</dd></div><div><dt>{t.hardware}</dt><dd>{facts.hardware[lang]}</dd></div></dl></section>
      <section className="product-chapter product-size-chapter" aria-labelledby="size-title"><p className="kicker">04 / VETO</p><h2 id="size-title">{t.sizeChapter}</h2><button className="product-size-link" type="button" onClick={openSizeDialog}>{t.finder} →</button></section>
      <section className="product-chapter" aria-labelledby="delivery-title"><p className="kicker">05 / VETO</p><h2 id="delivery-title">{t.deliveryReturns}</h2><ul className="delivery-list">{facts.delivery[lang].map(line=><li key={line}>{line}</li>)}</ul><a href="/delivery-returns" className="product-size-link">{t.deliveryLink} →</a></section>
