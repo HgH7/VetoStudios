@@ -73,7 +73,6 @@ export function add(color:CartItem['color'],size:CartItem['size']) {
  const existing=items.find(item=>item.color===color&&item.size===size);
  items=existing?items.map(item=>item===existing?{...item,qty:Math.min(5,item.qty+1)}:item):[...items,{color,size,qty:1}];
  publish();
- if(typeof window!=='undefined')window.dispatchEvent(new Event(CART_OPEN_EVENT));
 }
 
 export function setQuantity(color:CartItem['color'],size:CartItem['size'],qty:number) {

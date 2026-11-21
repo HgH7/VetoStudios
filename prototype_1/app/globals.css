@@ -101,7 +101,7 @@ header{background:rgba(243,240,232,.93)}
 /* Product belt compositions, size-hole preview, and Drop detail. */
 .product{isolation:isolate;min-height:650px}
 .product-index,.product-copy{position:relative;z-index:3}
-.product-art{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(8px,2vw,24px);padding-top:3%;pointer-events:none}
+.product-art{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(8px,2vw,24px);padding-top:calc(3% + .6vw);pointer-events:none}
 .product-art img{position:relative;display:block;height:auto;max-width:none;filter:none;mix-blend-mode:normal;object-fit:contain}
 .product .showcase-half{width:min(85vw,1224px);margin-left:2vw;filter:drop-shadow(0 5px 5px rgba(17,17,17,.22))}
 .product .showcase-free{width:min(74vw,1065px);margin-left:8vw;filter:drop-shadow(0 5px 5px rgba(17,17,17,.22))}
@@ -131,11 +131,42 @@ html[dir=rtl] .size-finder .size-inputs label{text-align:right}
 .drop>div{position:relative;z-index:2}
 @media(max-width:600px){
  .product{min-height:470px}
- .product-art{padding-top:7%;gap:8px}
+ .product-art{padding-top:11%;gap:8px}
  .product .showcase-half{width:85vw;margin-left:12px}
  .product .showcase-free{width:74vw;margin-left:5vw}
  .drop-buckle{right:-18vw;width:420px;opacity:.62}
  .drop:before{background:linear-gradient(90deg,rgba(243,240,232,.98),rgba(243,240,232,.82))}
+}
+
+@media(min-width:601px) and (max-width:1919px){
+ .product{min-height:calc(650px + clamp(0px,calc(3.47vw - 39.97px),20px))}
+ .drop{padding-bottom:calc(clamp(50px,8vw,110px) + 3.2px)}
+ .drop output{display:block;width:max-content;max-width:100%}
+ .remaining small{position:relative;top:18px}
+}
+
+@media(min-width:1920px){
+ html,body{overflow-x:clip}
+ .belt-sections,.drop{max-width:2800px;margin-inline:auto}
+ .product{min-height:min(54vw,1400px);overflow:visible}
+ .product-art{padding-top:calc(3% + .6vw);gap:clamp(24px,1vw,30px)}
+ .product .showcase-half{width:102%;margin-left:2vw}
+ .product .showcase-free{width:min(92vw,2580px);margin-left:4vw}
+ .product-copy{border-left:0;border-right:1px solid var(--ink);padding:0 clamp(20px,4vw,112px) 20px 0;text-align:right}
+ .product-copy h2{font-size:clamp(180px,13vw,320px)}
+ .product-copy p{margin:clamp(22px,1.1vw,34px) 0}
+ .product-copy .price{font-size:clamp(12px,.75vw,20px)}
+ .belt-sections .product-actions{justify-content:flex-end;gap:clamp(12px,.75vw,22px);margin-top:clamp(18px,1vw,28px)}
+ .belt-sections .product-action{min-height:clamp(44px,3vw,64px);padding-inline:clamp(13px,1vw,26px);font-size:clamp(10px,.55vw,16px)}
+ .belt-sections .product-action span{font-size:clamp(15px,.8vw,22px)}
+ .drop{min-height:min(36vw,960px);padding:clamp(100px,7vw,180px) 4vw;grid-template-columns:1.2fr 1fr;align-items:center}
+ .drop>div:first-of-type{display:grid;align-content:center;gap:clamp(18px,1vw,28px)}
+ .drop .kicker{margin:0}
+ .drop h2{font-size:clamp(70px,5vw,120px);margin:0}
+ .drop output{display:block;width:max-content;max-width:100%;font-size:clamp(105px,8vw,190px);line-height:.9}
+ .remaining{gap:clamp(14px,1.2vw,30px);padding-inline-start:clamp(30px,2vw,56px)}
+ .remaining strong{font-size:clamp(175px,11vw,280px);line-height:.8}
+ .drop-buckle{right:clamp(10px,4vw,112px);width:clamp(640px,34vw,900px)}
 }
 
 /* Product pages */
@@ -337,3 +368,45 @@ html[dir=rtl] .cart-overlay .cart-drawer{transform:translateX(0)}
  .order-actions .whatsapp-button{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.cart-drawer{transition:none}}
+
+/* Motion and final mobile polish */
+.cart-badge.is-bumping{animation:cart-bump .26s power3-out}
+@keyframes cart-bump{0%{transform:scale(.7)}55%{transform:scale(1.16)}100%{transform:scale(1)}}
+.drop output,.remaining strong{animation:digit-in .22s ease-out}
+@keyframes digit-in{from{opacity:.45}to{opacity:1}}
+body:before{animation:photocopy-step 4.8s steps(1,end) infinite}
+@keyframes photocopy-step{0%,100%{transform:translate(0,0);opacity:.055}25%{transform:translate(.8px,-.5px);opacity:.075}50%{transform:translate(-.6px,.8px);opacity:.045}75%{transform:translate(.4px,.4px);opacity:.065}}
+@media(max-width:600px){
+ html,body{max-width:100%;overflow-x:clip}
+ .remaining{row-gap:8px}
+ .remaining small{position:relative;top:14px}
+ header{height:64px;padding-inline:max(18px,env(safe-area-inset-left)) max(18px,env(safe-area-inset-right));padding-block:env(safe-area-inset-top) 0}
+ nav{gap:8px}
+ nav a{min-height:44px;display:inline-flex;align-items:center}
+ .lang,.cart-trigger{width:44px;height:44px}
+ .mast{min-height:42svh}
+ .entry{height:100dvh}
+ .builder,.size-finder,.members,.drop,.payments{padding-inline:max(18px,env(safe-area-inset-left)) max(18px,env(safe-area-inset-right))}
+ input[type=number],form input:not([type=checkbox]),.checkout-form-column input,.checkout-form-column select,.checkout-form-column textarea{font-size:16px}
+ .build-controls fieldset button,.unit button,.quantity-stepper button,.cart-remove,.product-size-link{min-height:44px}
+ .product-colors a,.product-sizes button{min-height:44px}
+ .cart-close{width:44px;height:44px}
+ .cart-drawer{padding-bottom:max(18px,env(safe-area-inset-bottom))}
+ .size-dialog-backdrop{padding:10px}
+ .size-dialog{max-height:calc(100dvh - 20px)}
+ .dialog-close{width:44px;height:44px}
+}
+@media(hover:none),(pointer:coarse){
+ button:active,a:active{transform:scale(.97)}
+ .enter:hover,.product-cart:hover,.cart-checkout:hover,.place-order-button:hover,.whatsapp-button:not(:disabled):hover{background:inherit}
+}
+@media(hover:hover){
+ nav a,.text-link,.product-size-link,.cart-empty a{transition:opacity .18s ease}
+ nav a:hover,.text-link:hover,.product-size-link:hover,.cart-empty a:hover{opacity:.65}
+ .enter,.product-cart,.cart-checkout,.place-order-button,.whatsapp-button,.range-card{transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
+ .range-card:hover{transform:translateY(-3px)}
+}
+@media(prefers-reduced-motion:reduce){
+ body:before,.cart-badge.is-bumping,.drop output,.remaining strong{animation:none!important}
+ .js .mast .kicker,.js .mast h1,.js .belt-sections .product-index,.js .belt-sections .product-copy,.js .builder .section-heading,.js .size-finder .section-heading,.js .drop>*{opacity:1!important;transform:none!important}
+}

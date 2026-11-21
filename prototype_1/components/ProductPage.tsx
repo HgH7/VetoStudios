@@ -251,7 +251,7 @@ export default function ProductPage({color,product}:Props) {
   addToCart(color,selectedSize);
   setMessage('');setAdded(true);
   if(cartTimer)clearTimeout(cartTimer);
-  setCartTimer(setTimeout(()=>setAdded(false),2000));
+  setCartTimer(setTimeout(()=>setAdded(false),1200));
  };
  const colorName=product.name[lang];
  return <div className="product-site">
@@ -270,7 +270,7 @@ export default function ProductPage({color,product}:Props) {
      <section className="product-chapter" aria-labelledby="material-title"><p className="kicker">02 / VETO</p><h2 id="material-title">{t.materialCraft}</h2><p>{facts.material[lang]}</p><p>{facts.craft[lang]}</p></section>
     <section className="product-chapter product-specs" aria-labelledby="specs-title"><p className="kicker">03 / VETO</p><h2 id="specs-title">{t.specs}</h2><dl><div><dt>{t.width}</dt><dd>{lang==='en'?'4 cm':'٤ سم'}</dd></div><div><dt>{t.sizeLabel}</dt><dd>85 / 95 / 100</dd></div><div><dt>{t.holes}</dt><dd>{lang==='en'?'5 / 2.5 cm apart':'٥ / تفصل بينها ٢٫٥ سم'}</dd></div><div><dt>{t.hardware}</dt><dd>{facts.hardware[lang]}</dd></div></dl></section>
      <section className="product-chapter product-size-chapter" aria-labelledby="size-title"><p className="kicker">04 / VETO</p><h2 id="size-title">{t.sizeChapter}</h2><button className="product-size-link" type="button" onClick={openSizeDialog}>{t.finder} →</button></section>
-     <section className="product-chapter" aria-labelledby="delivery-title"><p className="kicker">05 / VETO</p><h2 id="delivery-title">{t.deliveryReturns}</h2><ul className="delivery-list">{facts.delivery[lang].map(line=><li key={line}>{line}</li>)}</ul><a href="/delivery-returns" className="product-size-link">{t.deliveryLink} →</a></section>
+     <section className="product-chapter" aria-labelledby="delivery-title"><p className="kicker">05 / VETO</p><h2 id="delivery-title">{t.deliveryReturns}</h2><ul className="delivery-list">{facts.delivery[lang].map(line=><li key={line}>{line}</li>)}</ul><a href="/#belts" className="product-size-link">{t.deliveryLink} →</a></section>
     </div>
     <section className="product-range" aria-labelledby="range-title"><h2 id="range-title">{t.range}</h2><div className="range-cards">{colors.map((option,index)=><a key={option} href={`/belts/${option}`} className={`range-card${option===color?' is-current':''}`} aria-current={option===color?'page':undefined}><span>{`0${index+1} / ${products[option].name[lang]}`}</span><img src={`/belts/${option}/belt-${option}-buckle-half.webp`} alt={`${products[option].name[lang]} belt buckle`} width="2200" height="332" loading="lazy" decoding="async" /></a>)}</div></section>
    </div>

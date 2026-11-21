@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import outfits from '@/data/outfits.json';
 import products from '@/data/products.json';
 import beltGeometry from '../public/belts/geometry.json';
-import { getDrop, getMembers, getSizeChart } from '@/lib/data';
+import { getDrop, getSizeChart } from '@/lib/data';
 import { copy, type Text } from './copy';
 import { useLang } from './LangProvider';
 import SiteHeader from './SiteHeader';
@@ -134,7 +134,114 @@ export default function VetoPrototype(){
   if(!entered||!emptyCartNotice||window.location.hash!=='#belts')return;
   window.requestAnimationFrame(()=>document.getElementById('belts')?.scrollIntoView());
  },[entered,emptyCartNotice]);
- return !entered ? <Entry onEnter={()=>setEntered(true)} t={t}/> : <div id="top" className="site"><SiteHeader t={t} lang={lang} onToggleLang={()=>setLang(lang==='en'?'ar':'en')} home/><section className="mast"><p className="kicker">LOCAL / LEATHER / 2026</p><h1>{t.refuse}</h1></section><BeltSections t={t} lang={lang} emptyCartNotice={emptyCartNotice}/><OutfitSwitcher t={t}/><SizeFinder t={t}/><Drop t={t}/><Members t={t}/><section className="payments"><p className="kicker">{t.payment}</p><div><span>01 / {t.cod}</span><span>02 / {t.card}</span><span>03 / {t.wallet}</span></div></section></div>;
+ useEffect(()=>{
+  if(!entered)return;
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(reduce.matches)return;
+  let cancelled=false;
+  let context:{revert:()=>void}|undefined;
+  let idleObserver:IntersectionObserver|undefined;
+  let idleTargets:HTMLElement[]=[];
+  let refreshFrame=0;
+  let refresh=()=>{};
+  let images:HTMLImageElement[]=[];
+  const imageListeners=new Map<HTMLImageElement,()=>void>();
+  const scheduleRefresh=()=>{
+   if(cancelled)return;
+   if(refreshFrame)return;
+   refreshFrame=window.requestAnimationFrame(()=>{
+    refreshFrame=0;
+    refresh();
+   });
+  };
+  void (async()=>{
+   const [{gsap},{ScrollTrigger}]=await Promise.all([import('gsap'),import('gsap/ScrollTrigger')]);
+   if(cancelled)return;
+   gsap.registerPlugin(ScrollTrigger);
+   ScrollTrigger.config({ignoreMobileResize:true});
+   context=gsap.context(()=>{
+    const root=document.querySelector<HTMLElement>('.site');
+    if(!root)return;
+    const revealTargets=gsap.utils.toArray<HTMLElement>('.mast .kicker, .mast h1, .belt-sections .product-index, .belt-sections .product-copy, .builder .section-heading, .builder .scene, .size-finder .section-heading, .size-finder .size-grid, .drop > div',root);
+    revealTargets.forEach((element,index)=>{
+    gsap.set(element,{autoAlpha:0,y:20});
+    ScrollTrigger.create({
+     trigger:element,
+     start:'top 86%',
+     once:true,
+     onEnter:()=>gsap.to(element,{autoAlpha:1,y:0,duration:.8,ease:'power3.out',delay:Math.min(index*.06,.24),clearProps:'transform,opacity,visibility'}),
+    });
+    });
+    const revealScale=window.matchMedia('(max-width: 600px)').matches?1.06:1.08;
+    const revealY=window.matchMedia('(max-width: 600px)').matches?22:32;
+    gsap.utils.toArray<HTMLImageElement>('.product-art img, .drop-buckle',root).forEach(image=>{
+    const isDropBuckle=image.classList.contains('drop-buckle');
+    gsap.set(image,{autoAlpha:0,scale:revealScale,...(isDropBuckle?{y:revealY}:{})});
+    ScrollTrigger.create({
+     trigger:image,
+     start:'top 86%',
+     once:true,
+     onEnter:()=>gsap.to(image,{autoAlpha:1,scale:1,...(isDropBuckle?{y:0}:{}),duration:.8,ease:'power3.out',clearProps:'transform,opacity,visibility'}),
+    });
+    });
+    idleTargets=gsap.utils.toArray<HTMLElement>('.scene-photo',root);
+    idleTargets.forEach((image,index)=>{
+    gsap.set(image,{autoAlpha:0});
+    ScrollTrigger.create({
+     trigger:image,
+     start:'top 86%',
+     once:true,
+     onEnter:()=>gsap.to(image,{autoAlpha:1,duration:.8,ease:'power3.out',clearProps:'opacity,visibility'}),
+    });
+    gsap.to(image,{y:(index%2?-5:5),duration:5.5+(index%3),ease:'sine.inOut',repeat:-1,yoyo:true});
+    });
+   });
+   refresh=()=>ScrollTrigger.refresh();
+   window.addEventListener('resize',scheduleRefresh);
+   window.addEventListener('load',scheduleRefresh,{once:true});
+   void document.fonts?.ready.then(scheduleRefresh);
+   images=[...document.querySelectorAll<HTMLImageElement>('.site img')];
+   images.forEach(image=>{
+    const onReady=()=>scheduleRefresh();
+    imageListeners.set(image,onReady);
+    image.addEventListener('load',onReady);
+    image.addEventListener('error',onReady);
+    if(image.complete)onReady();
+   });
+   idleObserver=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+    const target=entry.target as HTMLElement;
+    gsap.getTweensOf(target).forEach(tween=>entry.isIntersecting?tween.resume():tween.pause());
+    });
+   });
+   idleTargets.forEach(image=>idleObserver?.observe(image));
+   const visibility=()=>document.hidden?gsap.globalTimeline.pause():gsap.globalTimeline.resume();
+   document.addEventListener('visibilitychange',visibility);
+   (window as Window & {__vetoScrollCleanup?:()=>void}).__vetoScrollCleanup=()=>{
+    document.removeEventListener('visibilitychange',visibility);
+    window.removeEventListener('resize',scheduleRefresh);
+    window.removeEventListener('load',scheduleRefresh);
+    images.forEach(image=>{
+    const onReady=imageListeners.get(image);
+    if(onReady){
+     image.removeEventListener('load',onReady);
+     image.removeEventListener('error',onReady);
+    }
+    });
+    imageListeners.clear();
+    if(refreshFrame)window.cancelAnimationFrame(refreshFrame);
+    idleObserver?.disconnect();
+   };
+  })();
+  return()=>{
+   cancelled=true;
+   context?.revert();
+   gsap?.globalTimeline?.resume();
+   (window as Window & {__vetoScrollCleanup?:()=>void}).__vetoScrollCleanup?.();
+   delete (window as Window & {__vetoScrollCleanup?:()=>void}).__vetoScrollCleanup;
+  };
+ },[entered]);
+ return !entered ? <Entry onEnter={()=>setEntered(true)} t={t}/> : <div id="top" className="site"><SiteHeader t={t} lang={lang} onToggleLang={()=>setLang(lang==='en'?'ar':'en')} home/><section className="mast"><p className="kicker">LOCAL / LEATHER / 2026</p><h1>{t.refuse}</h1></section><BeltSections t={t} lang={lang} emptyCartNotice={emptyCartNotice}/><OutfitSwitcher t={t}/><SizeFinder t={t}/><Drop t={t}/><section className="payments"><p className="kicker">{t.payment}</p><div><span>01 / {t.cod}</span><span>02 / {t.card}</span><span>03 / {t.wallet}</span></div></section></div>;
 }
 
 function BeltSections({t,lang,emptyCartNotice}:{t:Text;lang:'en'|'ar';emptyCartNotice:boolean}) { const colors=['RED','BLACK','WHITE']; const arrow=lang==='ar'?'←':'→'; return <section id="belts" className="belt-sections">{emptyCartNotice&&<p className="empty-cart-notice" role="status">{lang==='en'?'Your cart is empty. Add a belt to start a checkout.':'سلتك فارغة. أضف حزاماً لبدء الطلب.'}</p>}{colors.map((color,i)=>{const shade=color.toLowerCase() as keyof typeof products;return <article className={'product '+shade} key={color}><div className="product-index">0{i+1} / {color}</div><div className={`product-art product-art--${shade}`}><img className="showcase-half" src={`/belts/${shade}/belt-${shade}-buckle-half.webp`} alt={`VETO ${shade} leather belt with silver buckle`} width="2200" height="332" loading={i===0?'eager':'lazy'} decoding="async"/><img className="showcase-free" src={`/belts/${shade}/belt-${shade}-free-end.webp`} alt={`VETO ${shade} belt's perforated free end and tip`} width="2200" height="332" loading="lazy" decoding="async"/></div><div className="product-copy"><h2>{color}</h2><p className="price">{formatMoney(products[shade].price,lang)}</p><div className="product-actions"><a href={`/belts/${shade}`} className="product-action product-action--primary">{t.viewBelt}<span aria-hidden="true">{arrow}</span></a><a href="#size" className="product-action">{t.finder}</a></div></div></article>})}</section> }
@@ -241,6 +348,18 @@ function SizeFinder({t}:{t:Text}) {
  </section>;
 }
 
-function Drop({t}:{t:Text}){const d=getDrop();const [units,setUnits]=useState(d.unitsRemaining),[now,setNow]=useState(Date.now());useEffect(()=>{const tick=setInterval(()=>setNow(Date.now()),1000);const sale=setInterval(()=>setUnits(n=>Math.max(0,n-1)),7000+Math.random()*6000);return()=>{clearInterval(tick);clearInterval(sale)}},[]);const diff=Math.max(0,new Date(d.startsAt).getTime()-now);const time=[Math.floor(diff/86400000),Math.floor(diff/3600000)%24,Math.floor(diff/60000)%60,Math.floor(diff/1000)%60].map(x=>String(x).padStart(2,'0')).join(':');return <section id="drop" className="drop"><img className="drop-buckle" src="/belts/red/belt-red-buckle-macro.webp" alt="Close-up of the red VETO belt buckle" width="1400" height="1221" loading="lazy" decoding="async"/><div><p className="kicker">04 / {d.name}</p><h2>{t.starts}</h2><output>{time}</output></div><div className="remaining"><p>{t.remaining}</p><strong>{String(units).padStart(3,'0')}</strong><small>{t.live}</small></div></section>}
-
-function Members({t}:{t:Text}){const [members,setMembers]=useState(getMembers()),[name,setName]=useState(''),[hide,setHide]=useState(false),[notice,setNotice]=useState('');const join=(e:React.FormEvent)=>{e.preventDefault();if(!name.trim())return;const initials=name.trim().split(/\s+/).map(x=>x[0]?.toUpperCase()+'.').join('');const number=Math.max(...members.map(m=>m.number),0)+1;if(hide)setNotice(`#${String(number).padStart(4,'0')} ${t.noWall}`);else setMembers([{number,initials},...members]);setName('');};return <section id="members" className="members"><div className="section-heading"><p className="kicker">05 / {t.members}</p><h2>{t.join}</h2></div><div className="member-grid"><div className="wall">{members.map(m=><span key={m.number}>#{String(m.number).padStart(4,'0')} {m.initials}</span>)}</div><form onSubmit={join}><label>{t.name}<input value={name} onChange={e=>setName(e.target.value)} /></label><label className="check"><input type="checkbox" checked={hide} onChange={e=>setHide(e.target.checked)}/>{t.hide}</label><button className="enter">{t.add} →</button>{notice&&<p className="notice">{notice}</p>}</form></div></section>}
+function Drop({t}:{t:Text}) {
+ const d=getDrop();
+ const [units,setUnits]=useState(d.unitsRemaining);
+ const [now,setNow]=useState(Date.now());
+ useEffect(()=>{
+  const tick=setInterval(()=>setNow(Date.now()),1000);
+  const sale=setInterval(()=>setUnits(n=>Math.max(0,n-1)),7000+Math.random()*6000);
+  const visibility=()=>document.hidden?window.clearInterval(tick):undefined;
+  document.addEventListener('visibilitychange',visibility);
+  return()=>{clearInterval(tick);clearInterval(sale);document.removeEventListener('visibilitychange',visibility)};
+ },[]);
+ const diff=Math.max(0,new Date(d.startsAt).getTime()-now);
+ const time=[Math.floor(diff/86400000),Math.floor(diff/3600000)%24,Math.floor(diff/60000)%60,Math.floor(diff/1000)%60].map(x=>String(x).padStart(2,'0')).join(':');
+ return <section id="drop" className="drop"><img className="drop-buckle" src="/belts/red/belt-red-buckle-macro.webp" alt="Close-up of the red VETO belt buckle" width="1400" height="1221" loading="lazy" decoding="async"/><div><p className="kicker">04 / {d.name}</p><h2>{t.starts}</h2><output key={time}>{time}</output></div><div className="remaining"><p>{t.remaining}</p><strong key={units}>{String(units).padStart(3,'0')}</strong><small>{t.live}</small></div></section>
+}

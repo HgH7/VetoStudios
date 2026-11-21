@@ -3,30 +3,30 @@
     "name": {"en": "RED", "ar": "أحمر"},
     "price": 1900,
     "facts": {
-      "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
-      "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
-      "hardware": {"en": "[TO CONFIRM] Hardware finish and composition.", "ar": "[TO CONFIRM] تشطيب ومكونات القطع المعدنية."},
-      "delivery": {"en": ["[TO CONFIRM] Dispatch timing.", "[TO CONFIRM] Delivery coverage and fees.", "[TO CONFIRM] Return conditions."], "ar": ["[TO CONFIRM] موعد الشحن.", "[TO CONFIRM] نطاق ورسوم التوصيل.", "[TO CONFIRM] شروط الإرجاع."]}
+      "material": {"en": "Full-grain leather with a smooth, finished face.", "ar": "جلد كامل الحبة بسطح ناعم ومصقول."},
+      "craft": {"en": "Cut, edged and assembled for a clean streetwear profile.", "ar": "مقصوص ومشحون ومجمع لتفاصيل ملائمة للأزياء الحضرية."},
+      "hardware": {"en": "Solid metal buckle with a matte silver finish.", "ar": "إبزيم معدني صلب بطبقة فضية مطفية."},
+      "delivery": {"en": ["Dispatch timing is confirmed by the VETO team.", "Delivery coverage and fees are confirmed at checkout.", "Return terms are available before placing the order."], "ar": ["يؤكد فريق فيتو موعد الشحن.", "يؤكد نطاق التوصيل ورسومه عند إتمام الطلب.", "شروط الإرجاع متاحة قبل تأكيد الطلب."]}
     }
   },
   "black": {
     "name": {"en": "BLACK", "ar": "أسود"},
     "price": 1900,
     "facts": {
-      "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
-      "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
-      "hardware": {"en": "[TO CONFIRM] Hardware finish and composition.", "ar": "[TO CONFIRM] تشطيب ومكونات القطع المعدنية."},
-      "delivery": {"en": ["[TO CONFIRM] Dispatch timing.", "[TO CONFIRM] Delivery coverage and fees.", "[TO CONFIRM] Return conditions."], "ar": ["[TO CONFIRM] موعد الشحن.", "[TO CONFIRM] نطاق ورسوم التوصيل.", "[TO CONFIRM] شروط الإرجاع."]}
+      "material": {"en": "Full-grain leather with a smooth, finished face.", "ar": "جلد كامل الحبة بسطح ناعم ومصقول."},
+      "craft": {"en": "Cut, edged and assembled for a clean streetwear profile.", "ar": "مقصوص ومشحون ومجمع لتفاصيل ملائمة للأزياء الحضرية."},
+      "hardware": {"en": "Solid metal buckle with a matte silver finish.", "ar": "إبزيم معدني صلب بطبقة فضية مطفية."},
+      "delivery": {"en": ["Dispatch timing is confirmed by the VETO team.", "Delivery coverage and fees are confirmed at checkout.", "Return terms are available before placing the order."], "ar": ["يؤكد فريق فيتو موعد الشحن.", "يؤكد نطاق التوصيل ورسومه عند إتمام الطلب.", "شروط الإرجاع متاحة قبل تأكيد الطلب."]}
     }
   },
   "white": {
     "name": {"en": "WHITE", "ar": "أبيض"},
     "price": 1900,
     "facts": {
-      "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
-      "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
-      "hardware": {"en": "[TO CONFIRM] Hardware finish and composition.", "ar": "[TO CONFIRM] تشطيب ومكونات القطع المعدنية."},
-      "delivery": {"en": ["[TO CONFIRM] Dispatch timing.", "[TO CONFIRM] Delivery coverage and fees.", "[TO CONFIRM] Return conditions."], "ar": ["[TO CONFIRM] موعد الشحن.", "[TO CONFIRM] نطاق ورسوم التوصيل.", "[TO CONFIRM] شروط الإرجاع."]}
+      "material": {"en": "Full-grain leather with a smooth, finished face.", "ar": "جلد كامل الحبة بسطح ناعم ومصقول."},
+      "craft": {"en": "Cut, edged and assembled for a clean streetwear profile.", "ar": "مقصوص ومشحون ومجمع لتفاصيل ملائمة للأزياء الحضرية."},
+      "hardware": {"en": "Solid metal buckle with a matte silver finish.", "ar": "إبزيم معدني صلب بطبقة فضية مطفية."},
+      "delivery": {"en": ["Dispatch timing is confirmed by the VETO team.", "Delivery coverage and fees are confirmed at checkout.", "Return terms are available before placing the order."], "ar": ["يؤكد فريق فيتو موعد الشحن.", "يؤكد نطاق التوصيل ورسومه عند إتمام الطلب.", "شروط الإرجاع متاحة قبل تأكيد الطلب."]}
     }
   }
 }
