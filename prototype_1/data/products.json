@@ -1,6 +1,7 @@
 {
   "red": {
     "name": {"en": "RED", "ar": "أحمر"},
+    "price": 1900,
     "facts": {
       "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
       "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
@@ -10,6 +11,7 @@
   },
   "black": {
     "name": {"en": "BLACK", "ar": "أسود"},
+    "price": 1900,
     "facts": {
       "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
       "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},
@@ -19,6 +21,7 @@
   },
   "white": {
     "name": {"en": "WHITE", "ar": "أبيض"},
+    "price": 1900,
     "facts": {
       "material": {"en": "[TO CONFIRM] Material details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل الخامة بعد التحقق."},
       "craft": {"en": "[TO CONFIRM] Craft details will be added after verification.", "ar": "[TO CONFIRM] ستضاف تفاصيل التصنيع بعد التحقق."},

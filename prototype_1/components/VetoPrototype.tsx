@@ -3,11 +3,13 @@
 import gsap from 'gsap';
 import { useEffect, useRef, useState } from 'react';
 import outfits from '@/data/outfits.json';
+import products from '@/data/products.json';
 import beltGeometry from '../public/belts/geometry.json';
 import { getDrop, getMembers, getSizeChart } from '@/lib/data';
 import { copy, type Text } from './copy';
 import { useLang } from './LangProvider';
 import SiteHeader from './SiteHeader';
+import { formatMoney } from '@/lib/format-money';
 
 const entryAssets = [
  '/belts/red/belt-red-entry-left-noprong.webp',
@@ -121,11 +123,21 @@ function Entry({onEnter, t}:{onEnter:()=>void;t:Text}) {
 }
 
 export default function VetoPrototype(){
- const [entered,setEntered]=useState(false); const {lang,setLang}=useLang(); const t=copy[lang];
- return !entered ? <Entry onEnter={()=>setEntered(true)} t={t}/> : <div id="top" className="site"><SiteHeader t={t} lang={lang} onToggleLang={()=>setLang(lang==='en'?'ar':'en')} home/><section className="mast"><p className="kicker">LOCAL / LEATHER / 2026</p><h1>{t.refuse}</h1></section><BeltSections t={t} lang={lang}/><OutfitSwitcher t={t}/><SizeFinder t={t}/><Drop t={t}/><Members t={t}/><section className="payments"><p className="kicker">{t.payment}</p><div><span>01 / {t.cod}</span><span>02 / {t.card}</span><span>03 / {t.wallet}</span></div></section></div>;
+ const [entered,setEntered]=useState(false); const [emptyCartNotice,setEmptyCartNotice]=useState(false); const {lang,setLang}=useLang(); const t=copy[lang];
+ useEffect(()=>{
+  if(window.sessionStorage.getItem('veto-empty-cart-notice')!=='1')return;
+  window.sessionStorage.removeItem('veto-empty-cart-notice');
+  setEmptyCartNotice(true);
+  setEntered(true);
+ },[]);
+ useEffect(()=>{
+  if(!entered||!emptyCartNotice||window.location.hash!=='#belts')return;
+  window.requestAnimationFrame(()=>document.getElementById('belts')?.scrollIntoView());
+ },[entered,emptyCartNotice]);
+ return !entered ? <Entry onEnter={()=>setEntered(true)} t={t}/> : <div id="top" className="site"><SiteHeader t={t} lang={lang} onToggleLang={()=>setLang(lang==='en'?'ar':'en')} home/><section className="mast"><p className="kicker">LOCAL / LEATHER / 2026</p><h1>{t.refuse}</h1></section><BeltSections t={t} lang={lang} emptyCartNotice={emptyCartNotice}/><OutfitSwitcher t={t}/><SizeFinder t={t}/><Drop t={t}/><Members t={t}/><section className="payments"><p className="kicker">{t.payment}</p><div><span>01 / {t.cod}</span><span>02 / {t.card}</span><span>03 / {t.wallet}</span></div></section></div>;
 }
 
-function BeltSections({t,lang}:{t:Text;lang:'en'|'ar'}) { const colors=['RED','BLACK','WHITE']; const arrow=lang==='ar'?'←':'→'; return <section id="belts" className="belt-sections">{colors.map((color,i)=>{const shade=color.toLowerCase();return <article className={'product '+shade} key={color}><div className="product-index">0{i+1} / {color}</div><div className={`product-art product-art--${shade}`}><img className="showcase-half" src={`/belts/${shade}/belt-${shade}-buckle-half.webp`} alt={`VETO ${shade} leather belt with silver buckle`} width="2200" height="332" loading={i===0?'eager':'lazy'} decoding="async"/><img className="showcase-free" src={`/belts/${shade}/belt-${shade}-free-end.webp`} alt={`VETO ${shade} belt's perforated free end and tip`} width="2200" height="332" loading="lazy" decoding="async"/></div><div className="product-copy"><h2>{color}</h2><p className="price">{t.price}</p><div className="product-actions"><a href={`/belts/${shade}`} className="product-action product-action--primary">{t.viewBelt}<span aria-hidden="true">{arrow}</span></a><a href="#size" className="product-action">{t.finder}</a></div></div></article>})}</section> }
+function BeltSections({t,lang,emptyCartNotice}:{t:Text;lang:'en'|'ar';emptyCartNotice:boolean}) { const colors=['RED','BLACK','WHITE']; const arrow=lang==='ar'?'←':'→'; return <section id="belts" className="belt-sections">{emptyCartNotice&&<p className="empty-cart-notice" role="status">{lang==='en'?'Your cart is empty. Add a belt to start a checkout.':'سلتك فارغة. أضف حزاماً لبدء الطلب.'}</p>}{colors.map((color,i)=>{const shade=color.toLowerCase() as keyof typeof products;return <article className={'product '+shade} key={color}><div className="product-index">0{i+1} / {color}</div><div className={`product-art product-art--${shade}`}><img className="showcase-half" src={`/belts/${shade}/belt-${shade}-buckle-half.webp`} alt={`VETO ${shade} leather belt with silver buckle`} width="2200" height="332" loading={i===0?'eager':'lazy'} decoding="async"/><img className="showcase-free" src={`/belts/${shade}/belt-${shade}-free-end.webp`} alt={`VETO ${shade} belt's perforated free end and tip`} width="2200" height="332" loading="lazy" decoding="async"/></div><div className="product-copy"><h2>{color}</h2><p className="price">{formatMoney(products[shade].price,lang)}</p><div className="product-actions"><a href={`/belts/${shade}`} className="product-action product-action--primary">{t.viewBelt}<span aria-hidden="true">{arrow}</span></a><a href="#size" className="product-action">{t.finder}</a></div></div></article>})}</section> }
 
 type BuilderSelection = { scene: string; outfit: number; belt: string };
 

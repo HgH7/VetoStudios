@@ -227,3 +227,113 @@ html[dir=rtl] .product-range{direction:rtl}
  .belt-sections .product-actions{flex-direction:row;align-items:stretch}
 }
 @media(prefers-reduced-motion:reduce){.belt-sections .product-action{transition:none}.product-chapter{opacity:1!important;transform:none!important}}
+
+/* Cart, checkout, and order confirmation */
+.cart-trigger{position:relative;display:grid;place-items:center;width:38px;height:38px;padding:7px;border:1px solid var(--ink);background:transparent;color:var(--ink)}
+.cart-trigger svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cart-badge{position:absolute;top:-7px;inset-inline-end:-7px;min-width:17px;height:17px;padding:1px 4px;border-radius:20px;background:var(--red);color:#fff;font-size:9px;line-height:15px;text-align:center}
+.cart-overlay{position:fixed;z-index:80;inset:0;background:rgba(17,17,17,.62);display:flex;justify-content:flex-end}
+.cart-drawer{position:absolute;inset-block:0;inset-inline-end:0;width:min(470px,100vw);height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:0 24px 20px;background:var(--paper);color:var(--ink);box-shadow:0 0 40px rgba(0,0,0,.24);transform:translateX(105%);transition:transform .28s ease}
+.cart-overlay .cart-drawer{transform:translateX(0)}
+html[dir=rtl] .cart-drawer{transform:translateX(-105%)}
+html[dir=rtl] .cart-overlay .cart-drawer{transform:translateX(0)}
+.cart-drawer-header{position:static;height:auto;padding:21px 0 17px;border-bottom:1px solid var(--ink);background:transparent;backdrop-filter:none;display:flex;align-items:center;justify-content:space-between}
+.cart-drawer-header h2{margin:0;font:600 24px/1 Oswald,sans-serif}
+.cart-drawer-header h2 span{font:500 12px 'IBM Plex Mono',monospace}
+.cart-close{width:40px;height:40px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-size:27px;line-height:1}
+.cart-lines{overflow:auto;overscroll-behavior:contain}
+.cart-line{display:grid;grid-template-columns:104px minmax(0,1fr);gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
+.cart-line>img{width:104px;height:82px;object-fit:cover;object-position:left center;background:rgba(0,0,0,.04)}
+.cart-line-content{display:grid;grid-template-columns:1fr auto;align-content:start;gap:8px;min-width:0}
+.cart-line-title{display:grid;gap:5px}
+.cart-line-title strong{font:600 15px Oswald,sans-serif}
+.cart-line-title span,.cart-line-price{font-size:10px}
+.cart-line-price{white-space:nowrap}
+.cart-line-controls{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
+.quantity-stepper{display:flex;align-items:center;border:1px solid var(--line)}
+.quantity-stepper button{width:34px;height:32px;border:0;background:transparent;color:var(--ink);font-size:17px}
+.quantity-stepper button:disabled{opacity:.35;cursor:not-allowed}
+.quantity-stepper span{min-width:28px;text-align:center}
+.cart-remove{border:0;border-bottom:1px solid var(--line);padding:4px 0;background:transparent;color:var(--ink);font-size:9px}
+.cart-empty{align-self:center;justify-self:center;max-width:300px;text-align:center}
+.cart-empty p:first-child{font:600 24px Oswald,sans-serif}
+.cart-empty p:nth-child(2){text-transform:none}
+.cart-empty a,.text-link{display:inline-block;margin-top:12px;padding-bottom:5px;border-bottom:1px solid var(--ink);font-weight:600}
+.cart-totals{padding-top:16px}
+.cart-totals p{display:flex;justify-content:space-between;gap:16px;margin:0;padding:7px 0}
+.cart-totals p strong{text-align:end}
+.cart-total{margin-top:5px!important;padding-top:13px!important;border-top:1px solid var(--ink)}
+.cart-total strong{font-size:15px}
+.cart-checkout,.place-order-button,.whatsapp-button{display:flex;min-height:50px;align-items:center;justify-content:center;margin-top:16px;padding:14px 18px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:600 12px 'IBM Plex Mono',monospace;text-align:center}
+.cart-checkout:hover,.place-order-button:hover,.whatsapp-button:not(:disabled):hover{background:#333}
+.commerce-page{min-height:100vh}
+.checkout-layout{width:min(1220px,92vw);margin:0 auto;padding:clamp(34px,6vw,76px) 0 80px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(290px,.78fr);gap:clamp(34px,7vw,100px);align-items:start}
+.checkout-form-column h1,.order-confirmation h1,.order-missing h1{margin:0 0 22px;font:600 clamp(42px,7vw,82px)/.9 Oswald,sans-serif}
+.prototype-notice{margin:18px 0 28px;padding:13px 15px;border-inline-start:3px solid var(--red);background:rgba(235,29,39,.07);font-size:10px;line-height:1.7}
+.checkout-form{gap:25px}
+.checkout-fieldset{display:grid;gap:18px;padding:20px;border:1px solid var(--line)}
+.checkout-fieldset legend{padding:0 7px;font-weight:600}
+.checkout-fieldset label{display:grid;gap:7px;font-size:10px}
+.checkout-form input:not([type=radio]),.checkout-form select,.checkout-form textarea{width:100%;min-height:44px;padding:9px 10px;border:1px solid var(--line);border-radius:0;background:rgba(255,255,255,.13);color:var(--ink);font:500 14px 'IBM Plex Mono',monospace;text-transform:none;outline:none}
+.checkout-form select{appearance:auto}
+.checkout-form textarea{resize:vertical;min-height:80px}
+.checkout-form input:focus-visible,.checkout-form select:focus-visible,.checkout-form textarea:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.checkout-form [aria-invalid=true]{border-color:var(--red)!important}
+.field-error{color:#b10e17;font-size:10px;line-height:1.5;text-transform:none}
+.payment-options{gap:12px}
+.payment-option{display:flex!important;grid-template-columns:none;align-items:center;gap:10px!important;min-height:40px;padding:8px 10px;border:1px solid var(--line);font-size:11px!important}
+.payment-option input{accent-color:var(--red)}
+.payment-option.is-disabled{opacity:.55}
+.place-order-button{width:100%;margin-top:0;cursor:pointer}
+.checkout-summary,.order-summary-block{position:sticky;top:88px;padding:22px;border:1px solid var(--ink);background:rgba(255,255,255,.1)}
+.checkout-summary h2,.order-summary-block h2,.order-details-block h2{margin:0 0 16px;font:600 23px/1 Oswald,sans-serif}
+.checkout-summary-lines{display:grid}
+.checkout-summary-line{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:10px}
+.checkout-summary-line img{width:62px;height:52px;object-fit:cover;object-position:left center}
+.checkout-summary-line>div{display:grid;gap:5px;min-width:0}
+.checkout-summary-line strong{overflow-wrap:anywhere}
+.checkout-summary-line>strong{text-align:end}
+.checkout-summary .cart-totals{border-top:1px solid var(--line);margin-top:7px}
+.commerce-status{width:min(1220px,92vw);margin:32px auto}
+.order-page{width:min(1160px,92vw);margin:0 auto;padding:clamp(34px,6vw,76px) 0 80px}
+.order-confirmation{max-width:780px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.order-confirmation h1{color:var(--red)}
+.order-number-label{margin:0 0 6px;font-size:10px}
+.order-number{font:600 clamp(26px,4vw,42px)/1 Oswald,sans-serif}
+.order-content-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,.75fr);gap:clamp(30px,7vw,90px);align-items:start;padding-top:36px}
+.order-details-block h2{margin-bottom:20px}
+.order-address{margin:0}
+.order-address>div{display:grid;grid-template-columns:minmax(130px,.7fr) 1.3fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.order-address dt{font-size:9px}
+.order-address dd{margin:0;line-height:1.6;text-transform:none;overflow-wrap:anywhere}
+.next-heading{margin-top:34px!important}
+.next-steps{display:grid;gap:13px;padding-inline-start:23px;line-height:1.7;text-transform:none}
+.draft{display:inline-block;padding:0 3px;background:rgba(235,29,39,.08);text-transform:none}
+.order-actions{display:flex;align-items:center;flex-wrap:wrap;gap:22px;margin-top:35px}
+.order-actions .whatsapp-button{min-width:min(360px,100%);margin:0}
+.whatsapp-button:disabled{opacity:.45;cursor:not-allowed}
+.whatsapp-note{width:100%;margin:-14px 0 0;color:#9d151d;font-size:10px}
+.order-actions .text-link{margin:0}
+.empty-cart-notice{margin:0;padding:15px 4vw;background:var(--red);color:#fff;font-weight:600}
+.order-missing{width:min(900px,92vw);margin:clamp(60px,12vw,150px) auto}
+.order-missing p{text-transform:none}
+@media(max-width:760px){
+ .checkout-layout,.order-content-grid{grid-template-columns:minmax(0,1fr)}
+ .checkout-layout{width:min(650px,92vw);gap:32px}
+ .checkout-summary,.order-summary-block{position:static;grid-row:1}
+ .checkout-form-column{grid-row:2}
+ .order-page{width:min(650px,92vw)}
+}
+@media(max-width:600px){
+ .cart-drawer{padding:0 18px 18px}
+ .cart-line{grid-template-columns:86px minmax(0,1fr);gap:10px}
+ .cart-line>img{width:86px;height:72px}
+ .checkout-layout{width:calc(100% - 36px);padding-top:30px}
+ .checkout-fieldset{padding:15px}
+ .checkout-summary,.order-summary-block{padding:16px}
+ .order-page{width:calc(100% - 36px);padding-top:34px}
+ .order-address>div{grid-template-columns:110px minmax(0,1fr);gap:9px}
+ .order-actions{align-items:stretch;flex-direction:column}
+ .order-actions .whatsapp-button{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.cart-drawer{transition:none}}

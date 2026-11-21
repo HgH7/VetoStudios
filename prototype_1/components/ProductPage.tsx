@@ -8,6 +8,7 @@ import { copy, type Lang } from './copy';
 import { useLang } from './LangProvider';
 import SiteHeader from './SiteHeader';
 import SizeFinder from './SizeFinder';
+import { formatMoney } from '@/lib/format-money';
 
 type BeltColor = CartItem['color'];
 type ProductData = typeof products.red;
@@ -260,7 +261,7 @@ export default function ProductPage({color,product}:Props) {
    <div className="product-detail-column">
     <div className="product-details">
      <section className="product-chapter product-intro" aria-labelledby="product-title">
-      <p className="kicker">01 / VETO BELT</p><h1 id="product-title">{colorName}</h1><p className="product-price">{t.price}</p>
+      <p className="kicker">01 / VETO BELT</p><h1 id="product-title">{colorName}</h1><p className="product-price">{formatMoney(product.price,lang)}</p>
       <div className="product-choice"><p>{t.color}</p><div className="product-colors" role="group" aria-label={t.color}>{colors.map(option=><a key={option} href={`/belts/${option}`} aria-current={option===color?'page':undefined} aria-label={products[option].name[lang]}>{products[option].name[lang]}</a>)}</div></div>
       <div className="product-choice"><p>{t.sizeLabel}</p><div className="product-sizes" role="group" aria-label={t.sizeLabel}>{sizes.map(size=><button type="button" key={size} aria-pressed={selectedSize===size} className={selectedSize===size?'is-selected':''} onClick={()=>{setSelectedSize(size);setMessage('');}}>{size}</button>)}</div></div>
       {message&&<p className="cart-message" role="status">{message}</p>}
