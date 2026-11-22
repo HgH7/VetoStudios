@@ -40,3 +40,4 @@ Open `http://localhost:3000`. Create a production build with `npm run build`.
 The visual system uses a grayscale paper/ink base, one red accent (`--red`), condensed display type, mono utility type, a fixed noise overlay, and contrast treatments on the provided transparent WebP belt assets. Model, outfit, and scene visuals are deliberately labeled CSS placeholders because no corresponding image assets were supplied.
 
 The size chart and drop information are prototype data and should be replaced with real production values before launch. No backend, accounts, payments, or persistent member storage are implemented.
+# VetoStudios
